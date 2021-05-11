@@ -23,16 +23,16 @@ pause(1); %Allow some time for MATLAB to start the subscribers
 end_effector_rotation = [0,0,0];
 
 % Cordinates: XYZ
-waypoints{1} = [0.2067         0    0.1350];        % q = zeros(1,4)
-waypoints{2} = [0.1710   -0.1177    0.1376];
-waypoints{3} = [0.0882   -0.1875    0.1383];
-waypoints{4} = [-0.0078   -0.2064    0.1379];
-waypoints{5} = [-0.0145   -0.2993    0.0718];       % right above sponge
-waypoints{6} = [-0.0163   -0.2991    0.0255];       % ready to close gripper
+waypointCoords{1} = [0.2067         0    0.1350];        % q = zeros(1,4)
+waypointCoords{2} = [0.1710   -0.1177    0.1376];
+waypointCoords{3} = [0.0882   -0.1875    0.1383];
+waypointCoords{4} = [-0.0078   -0.2064    0.1379];
+waypointCoords{5} = [-0.0145   -0.2993    0.0718];       % right above sponge
+waypointCoords{6} = [-0.0163   -0.2991    0.0255];       % ready to close gripper
 
 % Poses: TR
-for i=1:length(waypoints)
-    waypoints{i} = eul2tr(end_effector_rotation) * transl(waypoints{i}(1),waypoints{i}(2),waypoints{i}(3));
+for i=1:length(waypointCoords)
+    waypointPoses{i} = eul2tr(end_effector_rotation) * transl(waypointCoords{i}(1),waypointCoords{i}(2),waypointCoords{i}(3));
 end
 
 %% Current safety status
@@ -44,7 +44,7 @@ dobot.PublishTargetJoint(joint_target);
 
 %% Publish custom end effector pose
 waypointIndex = 1;
-end_effector_position = waypoints{waypointIndex};
+end_effector_position = waypointCoords{waypointIndex};
 end_effector_rotation = [0,0,0];  
 dobot.PublishEndEffectorPose(end_effector_position,end_effector_rotation);
 
@@ -96,10 +96,10 @@ currentEndEffectorPose = transl(currentEndEffectorPosition)*eul2tr(euler)
 
 waypointIndex = 4;
 % % using waypoint coords
-% joint_target = IKdobot_real_inputXYZ(waypoints{waypointIndex})
+% joint_target = IKdobot_real_inputXYZ(waypointCoords{waypointIndex})
 
 % using waypoint poses
-joint_target = IKdobot_real_inputTR(waypoints{waypointIndex})
+joint_target = IKdobot_real_inputTR(waypointPoses{waypointIndex})
 
 dobot.PublishTargetJoint(joint_target);
 
@@ -113,7 +113,7 @@ dobot.PublishTargetJoint(joint_target);
 % 
 % % while~(pickupPosReached)
 %     for i=1:length(waypoints)
-%         end_effector_position = waypoints{i};      % above the sponge and its container
+%         end_effector_position = waypointCoords{i};      % above the sponge and its container
 %         dobot.PublishEndEffectorPose(end_effector_position,end_effector_rotation);
 %         pause(2);
 %     end
@@ -134,10 +134,10 @@ send(toolStatePub,toolStateMsg);
 pause(2);
 
 while~(pickupPosReached)
-    for i=1:length(waypoints)
+    for i=1:length(waypointCoords)
         waypointIndex = i;
-%         joint_target = IKdobot_real_inputXYZ(waypoints{waypointIndex})
-        joint_target = IKdobot_real_inputTR(waypoints{waypointIndex})
+%         joint_target = IKdobot_real_inputXYZ(waypointCoords{waypointIndex})
+        joint_target = IKdobot_real_inputTR(waypointPoses{waypointIndex})
         dobot.PublishTargetJoint(joint_target);
         pause(2);
     end
