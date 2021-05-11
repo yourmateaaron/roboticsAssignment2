@@ -18,8 +18,8 @@ function [q_model, q_real] = IKdobot_inputTransform(TR)
     D_model = sqrt(l.^2 + z_model.^2);
     D_real = sqrt(l.^2 + z_real.^2);
 
-    theta1_model = atan(z_model/l);
-    theta1_real = atan(z_real/l);
+    theta1_model = atan2(z_model,l);
+    theta1_real = atan2(z_real,l);
     
     theta2_model = acos((a2.^2 + D_model.^2 - a3.^2)/(2*a2*D_model));
     theta2_real = acos((a2.^2 + D_real.^2 - a3.^2)/(2*a2*D_real));
@@ -31,8 +31,8 @@ function [q_model, q_real] = IKdobot_inputTransform(TR)
     beta_real = acos((a2.^2 + a3.^2 - D_real.^2)/(2*a2*a3));
 
     % q1
-    q_real(1)= atan2(y,x);
-    q_model(1) = q_real(1);
+    q_model(1)= atan2(y,x);
+    q_real(1) = q_model(1);
 
     % q2
     q_real(2) =  pi/2 - alpha_real;
