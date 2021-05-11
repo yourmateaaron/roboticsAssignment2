@@ -25,14 +25,14 @@ function GetDobotRobot(self)
 %     if nargin < 1
         % Create a unique name (ms timestamp after 1ms pause)
         pause(0.001);
-        name = ['Dobot_',datestr(now,'yyyymmddTHHMMSSFFF')];
+        name = 'Wiper';
 %     end
 
     % DH Parameters
     L(1) = Link('d',0.138,  'a',0,      'alpha',-pi/2, 'offset',0);
     L(2) = Link('d',0,      'a',0.135,  'alpha',0,     'offset',-pi/2);
     L(3) = Link('d',0,      'a',0.147,  'alpha',0,     'offset',0);
-    L(4) = Link('d',0,      'a',0.035,  'alpha',pi/2,  'offset',-pi/2);     
+    L(4) = Link('d',0,      'a',0.0597,  'alpha',pi/2,  'offset',-pi/2);     
     L(5) = Link('d',0,      'a',0,      'alpha',0,     'offset',0);
 
     % Joint Limits
