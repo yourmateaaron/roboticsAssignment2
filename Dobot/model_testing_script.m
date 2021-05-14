@@ -1,7 +1,7 @@
-clear all;
-clc;
-close all;
-
+clear all
+clc
+clf
+% set(0,'DefaultFigureWindowStyle','docked')
 %% Create model
 
 dobot = Dobot()
@@ -18,7 +18,8 @@ waypointCoords{3} = [0.0882   -0.1875    0.1383];
 waypointCoords{4} = [-0.0078   -0.2064    0.1379];
 waypointCoords{5} = [-0.0145   -0.2993    0.0718];       % right above sponge
 waypointCoords{6} = [-0.0163   -0.2991    0.0255];       % ready to close gripper
-waypointCoords{7} = [0.1710   0.1177    0.1376];
+waypointCoords{7} = [0.4   0.1177    0.1376];
+
 
 % Poses: TR
 for i=1:length(waypointCoords)
@@ -27,25 +28,34 @@ end
 
 %% Solve IK and plot (custom)
 
-waypointIndex = 3;
-q_model = IKdobot_inputTransform(waypointPoses{waypointIndex})
+% clf
+% view([60 30]);
+
+waypointIndex = 1;
+[q_model, q_real] = IKdobot_inputTransform(waypointPoses{waypointIndex})
 dobot.model.plot(q_model);
 tr_model = dobot.model.fkine(q_model)
 
 %% Solve IK and plot (ikcon)
+% 
+% clf
+% view([45 30]);
 
-waypointIndex = 3;
+waypointIndex = 1;
 q_model_ikcon = dobot.model.ikcon(waypointPoses{waypointIndex})
 dobot.model.plot(q_model_ikcon);
 tr_model_ikcon = dobot.model.fkine(q_model_ikcon)
 
 %% Move Dobot using Joint Interpolation
 
+clf
+view([60 30]);
+
 steps = 50;
 
 % define the transformations for two poses
-T1 = waypointPoses{2};      % first pose
-T2 = waypointPoses{7};      % second pose
+T1 = waypointPoses{1};      % first pose
+T2 = waypointPoses{3};      % second pose
 
 % use custom IK to solve for joint angles of each pose
 q1 = IKdobot_inputTransform(T1)         % sovle for joint angles
@@ -57,11 +67,88 @@ pause(2)
 qMatrix = jtraj(q1,q2,steps);
 dobot.model.plot(qMatrix,'trail','r-');       % not plotting trail??
 
+%% Wipe pre-defined area
+
+clf
+view([0 0]);
+
+steps = 50;   % No. of steps for simulation
+delta = 2*pi/steps; % Small angle change
+qMatrix = zeros(steps,5);
+
+wipeLocation = [0.2 0];
+wipeRadius = 0.05;
+wipeHeight = 0.126;
+
+for i=1:steps
+    x(1,i) = wipeLocation(1) + wipeRadius*sin(delta*i)
+    x(2,i) = wipeLocation(2) + wipeRadius*cos(delta*i)
+    x(3,i) = wipeHeight                     
+    theta(1,i) = 0;                     % Roll angle 
+    theta(2,i) = 0;                     % Pitch angle
+    theta(3,i) = 0;                     % Yaw angle
+    T = [rpy2r(theta(1,i),theta(2,i),theta(3,i)) x(:,i);    % create transformation of first point and angle
+        zeros(1,3)  1 ];
+    qMatrix(i,:) = IKdobot_inputTransform(T);
+%     qMatrix(i,:) = dobot.model.ikcon(T)
+end
+
+dobot.model.plot(qMatrix,'trail','r-');
+
+% % for publishing target join for real dobot because it can't publish a matrix of joints
+% pauseTime = 0.2;
+% for i=1:steps
+%     dobot.model.plot(qMatrix(i,:),'trail','r-');
+%     pause(pauseTime);
+% end
+
+%% Wipe Multiple pre-defined areas
+
+clf
+view([60 30]);
+
+steps = 25;   % No. of steps for simulation
+delta = 2*pi/steps; % Small angle change
+qMatrix = zeros(steps,5);
+
+% Wiping locations
+wipeHeight = 0.126;           % height of surface above base of dobot
+% Wiping areas
+wipeCenter{1} = [0.125, 0.2];
+wipeCenter{2} = [0.225, 0];
+wipeCenter{3} = [0.125, -0.2];
+
+wipeRadiusIncrement = 0.03;
+wipeRadiusMin = 0.03;
+wipeRadiusMax = 0.09;
+
+for a=1:length(wipeCenter)
+    for wipeRadius=wipeRadiusMin:wipeRadiusIncrement:wipeRadiusMax     % wipe in circles of increasing size
+        for i=1:steps
+            x(1,i) = wipeCenter{a}(1) + wipeRadius*sin(delta*i);
+            x(2,i) = wipeCenter{a}(2) + wipeRadius*cos(delta*i);
+            x(3,i) = wipeHeight;                     
+            theta(1,i) = 0;                     % Roll angle 
+            theta(2,i) = 0;                     % Pitch angle
+            theta(3,i) = 0;                     % Yaw angle
+            T = [rpy2r(theta(1,i),theta(2,i),theta(3,i)) x(:,i);    % create transformation of first point and angle
+                zeros(1,3)  1 ];
+            qMatrix(i,:) = IKdobot_inputTransform(T);
+%             qMatrix(i,:) = dobot.model.ikcon(T)
+        end
+
+        dobot.model.plot(qMatrix,'trail','r-');
+    end
+end
+
 
 %% Move Dobot model using RMRC
 
-startWaypointIndex = 2;
-endWaypointIndex = 7;
+clf
+view([60 30]);
+
+startWaypointIndex = 5;
+endWaypointIndex = 1;
 x1 = waypointCoords{startWaypointIndex}';
 x2 = waypointCoords{endWaypointIndex}';
 
@@ -94,9 +181,9 @@ end
 
 T = [rpy2r(theta(1,1),theta(2,1),theta(3,1)) x(:,1);    % create transformation of first point and angle
         zeros(1,3)  1 ];
-q0 = zeros(1,5);                                      % initial guess for joint angles
-qMatrix(1,:) = dobot.model.ikcon(T,q0);
-% qMatrix(1,:) = IKdobot_inputTransform(T);               % solve joint angles to achieve first waypoint                   
+% q0 = zeros(1,5);                                      % initial guess for joint angles
+% qMatrix(1,:) = dobot.model.ikcon(T,q0);
+qMatrix(1,:) = IKdobot_inputTransform(T);               % solve joint angles to achieve first waypoint                   
 
 % Track trajectory with RMRC
 for i=1:steps-1
@@ -113,7 +200,7 @@ for i=1:steps-1
     xdot = W*[linear_velocity;angular_velocity];        % calculate end-effector velocity to reach next waypoint
     J = dobot.model.jacob0(qMatrix(i,:));             % get jacobian at current joint state
     J = J(1:5,:);           % take first 5 rows to make square matrix
-    mom(i) = sqrt(det(J*J'));
+    mom(i) = real(sqrt(det(J*J')));
     if mom(i) < epsilon                       % if manipulability is less than given threshold
         lambda = (1 - mom(i)/epsilon)*5E-2;
     else
@@ -181,6 +268,9 @@ dobot.model.plot(qMatrix,'trail','r-')
 
 %% Wipe table RMRC
 
+clf
+view([60 30]);
+
 % Set parameters for the simulation
 t = 10;             % Total time (s)
 deltaT = 0.2;      % Control frequency
@@ -199,19 +289,18 @@ x = zeros(3,steps);             % Array for x-y-z trajectory
 positionError = zeros(3,steps); % For plotting trajectory error
 angleError = zeros(3,steps);    % For plotting trajectory error
 
-areaCleaned = false;
-areasToClean{1} = [0 0.2];
-areasToClean{2} = [0.15 0.15];
-areasToClean{3} = [0.2 0];
-areasToClean{4} = [0.15 -0.15];
+wipeCenter{1} = [0 0.2];
+wipeCenter{2} = [0.15 0.15];
+wipeCenter{3} = [0.2 0];
+wipeCenter{4} = [0.15 -0.15];
 
-for a=1:length(areasToClean)
-    for r=0.04:0.04:0.12      % wipe in circles of increasing size
+for a=1:length(wipeCenter)
+    for r=0.03:0.04:0.11      % wipe in circles of increasing size
         % Set up trajectory, intial pose
         s = lspb(0,1,steps);            % trapezoidal trajectory scalar
         for i=1:steps
-            x(1,i) = areasToClean{a}(1) + r*cos(delta*i);
-            x(2,i) = areasToClean{a}(2) + r*sin(delta*i);
+            x(1,i) = wipeCenter{a}(1) + r*cos(delta*i);
+            x(2,i) = wipeCenter{a}(2) + r*sin(delta*i);
             x(3,i) = 0.135;                            
             theta(1,i) = 0;                     % Roll angle 
             theta(2,i) = 0;                     % Pitch angle
@@ -220,9 +309,9 @@ for a=1:length(areasToClean)
 
         T = [rpy2r(theta(1,1),theta(2,1),theta(3,1)) x(:,1);    % create transformation of first point and angle
                 zeros(1,3)  1 ];
-        q0 = zeros(1,5);                                      % initial guess for joint angles
-        qMatrix(1,:) = dobot.model.ikcon(T,q0);
-        % qMatrix(1,:) = IKdobot_inputTransform(T);               % solve joint angles to achieve first waypoint                   
+%         q0 = zeros(1,5);                                      % initial guess for joint angles
+%         qMatrix(1,:) = dobot.model.ikcon(T,q0);
+        qMatrix(1,:) = IKdobot_inputTransform(T);               % solve joint angles to achieve first waypoint                   
 
         % Track trajectory with RMRC
         for i=1:steps-1
@@ -239,7 +328,7 @@ for a=1:length(areasToClean)
             xdot = W*[linear_velocity;angular_velocity];        % calculate end-effector velocity to reach next waypoint
             J = dobot.model.jacob0(qMatrix(i,:));             % get jacobian at current joint state
             J = J(1:5,:);           % take first 5 rows to make square matrix
-            mom(i) = sqrt(det(J*J'));
+            mom(i) = real(sqrt(det(J*J')));
             if mom(i) < epsilon                       % if manipulability is less than given threshold
                 lambda = (1 - mom(i)/epsilon)*5E-2;
             else
