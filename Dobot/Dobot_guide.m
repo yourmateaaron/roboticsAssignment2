@@ -23,7 +23,7 @@ function varargout = Dobot_guide(varargin)
 
 % Edit the above text to modify the response to help Dobot_guide
 
-% Last Modified by GUIDE v2.5 14-May-2021 17:56:42
+% Last Modified by GUIDE v2.5 14-May-2021 23:28:14
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -506,15 +506,71 @@ if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgr
 end
 
 
-% --- Executes on button press in pushbutton19.
-function pushbutton19_Callback(hObject, eventdata, handles)
-% hObject    handle to pushbutton19 (see GCBO)
+% --- Executes on button press in Stop.
+function Stop_Callback(hObject, eventdata, handles)
+% hObject    handle to Stop (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
-
-
+uiwait(Dobot_guide);
 % --- Executes on button press in pushbutton20.
 function pushbutton20_Callback(hObject, eventdata, handles)
 % hObject    handle to pushbutton20 (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
+uiresume(Dobot_guide);
+
+% --- Executes on button press in wipeAll.
+function wipeAll_Callback(hObject, eventdata, handles)
+% hObject    handle to wipeAll (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+steps = 25;   % No. of steps for simulation
+delta = 2*pi/steps; % Small angle change
+qMatrix = zeros(steps,5);
+
+ 
+
+% Wiping locations
+wipeHeight = 0.126;           % height of surface above base of dobot
+% Wiping areas
+wipeCenter{1} = [0.125, 0.2];
+wipeCenter{2} = [0.225, 0];
+wipeCenter{3} = [0.125, -0.2];
+
+ 
+
+wipeRadiusIncrement = 0.03;
+wipeRadiusMin = 0.03;
+wipeRadiusMax = 0.09;
+
+ 
+
+for a=1:length(wipeCenter)
+    for wipeRadius=wipeRadiusMin:wipeRadiusIncrement:wipeRadiusMax     % wipe in circles of increasing size
+        for i=1:steps
+            x(1,i) = wipeCenter{a}(1) + wipeRadius*sin(delta*i);
+            x(2,i) = wipeCenter{a}(2) + wipeRadius*cos(delta*i);
+            x(3,i) = wipeHeight;                     
+            theta(1,i) = 0;                     % Roll angle 
+            theta(2,i) = 0;                     % Pitch angle
+            theta(3,i) = 0;                     % Yaw angle
+            T = [rpy2r(theta(1,i),theta(2,i),theta(3,i)) x(:,i);    % create transformation of first point and angle
+                zeros(1,3)  1 ];
+            qMatrix(i,:) = IKdobot_inputTransform(T);
+%             qMatrix(i,:) = dobot.model.ikcon(T)
+        end
+
+ 
+
+        handles.model.plot(qMatrix,'trail','r-');
+    end
+end
+            
+
+  
+         
+   
+        
+        
+        
