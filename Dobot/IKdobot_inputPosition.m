@@ -1,13 +1,15 @@
 function [q_model, q_real] = IKdobot_inputPosition(x,y,z)
     
+    %DH 
     d1 = 0.138;
     a2 = 0.135;
     a3 = 0.147;
-    a4 = 0.0597;
+    a4 = 0.044;
+    d5 = -0.138;
    
     rpy = [0,0,0];      % end effector no rotation
     
-    z_model = z - d1;
+    z_model = z-d1-d5;
     z_real = z;
   
     l = sqrt(x.^2 + y.^2) - a4;
@@ -46,6 +48,23 @@ function [q_model, q_real] = IKdobot_inputPosition(x,y,z)
 
     % q5
     q_model(5) = q_real(4);
+    
+    % joint limits
+    qlim{1} = [-135 135]*pi/180;
+    qlim{2} = [5 80]*pi/180;
+    qlim{3} = [15 170]*pi/180;
+    qlim{4} = [-90 90]*pi/180;
+    qlim{5} = [-85 85]*pi/180;
+
+    [qlim{1};qlim{2};qlim{3};qlim{4};qlim{5}];
+    
+    for i=1:length(q_model)
+        if(q_model(i)<qlim{i}(1))
+            q_model(i) = qlim{i}(1);
+        elseif(q_model(i)>qlim{i}(2))
+            q_model(i) = qlim{i}(2);
+        end
+    end
 
 end
 
