@@ -32,8 +32,8 @@ function GetDobotRobot(self)
     L(1) = Link('d',0.138,  'a',0,      'alpha',-pi/2, 'offset',0);
     L(2) = Link('d',0,      'a',0.135,  'alpha',0,     'offset',-pi/2);
     L(3) = Link('d',0,      'a',0.147,  'alpha',0,     'offset',0);
-    L(4) = Link('d',0,      'a',0.0597,  'alpha',pi/2,  'offset',-pi/2);     
-    L(5) = Link('d',0,      'a',0,      'alpha',0,     'offset',0);
+    L(4) = Link('d',0,      'a',0.044,  'alpha',pi/2,  'offset',-pi/2);     
+    L(5) = Link('d',-0.138,      'a',0,      'alpha',0,     'offset',0);
 
     % Joint Limits
     L(1).qlim = [-135 135]*pi/180;
