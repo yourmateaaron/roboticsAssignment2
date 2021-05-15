@@ -6,6 +6,7 @@ classdef Dobot < handle
         %>
         workspace = [-1 1 -1 1 -0.3 1];
         scale = 0.5;
+        qhome = [0    0.1166    1.4480    1.5770         0];
     end
     
     methods%% Class for Dobot robot simulation
@@ -46,7 +47,7 @@ function GetDobotRobot(self)
 end
 %% Plot
 function PlotRobot(self)
-    self.model.plot(zeros(1,self.model.n),'workspace',self.workspace,'scale',self.scale)
+    self.model.plot(self.qhome,'workspace',self.workspace,'scale',self.scale)
     view(3);
 end
 
@@ -78,6 +79,25 @@ end
 %             disp(ME_1);
 %             continue;
 %         end
-%     end        
+%     end
+%% GetLinkPoses
+% Gets the transform for every joint
+% q - robot joint angles
+% robot -  seriallink robot model
+% transforms - list of transforms
+function [ transforms ] = GetLinkPoses( self, q )
+    
+    transforms = zeros(4,4,self.model.n+1);
+    transforms(:,:,1) = self.model.base;
+    L = self.model.links;
+    
+    for i = 1:self.model.n
+        transforms(:,:,i+1) = transforms(:,:,i) * trotz(q(i)+L(i).offset)...
+                                                * transl(0,0,L(i).d)...
+                                                * transl(L(i).a,0,0)...
+                                                * trotx(L(i).alpha);
+    end
+end
+
 end
 end
