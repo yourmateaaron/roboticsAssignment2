@@ -23,7 +23,7 @@ function varargout = Dobot_guide(varargin)
 
 % Edit the above text to modify the response to help Dobot_guide
 
-% Last Modified by GUIDE v2.5 14-May-2021 23:28:14
+% Last Modified by GUIDE v2.5 16-May-2021 06:31:31
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -100,7 +100,7 @@ axes(handles.axes1);
     model = SerialLink(L,'name','Dobot');
     workspace = [-1 1 -1 1 -0.3 1];
     scale = 0.5;
-    qhome = [0    0.4976    2.0476    0.5963         0];
+    qhome = [0    0.1166    1.4480    1.5770         0];
     model.plot(qhome,'noarrow','workspace',workspace,'scale',scale);
     view([45 30]);
     data = guidata(hObject);
@@ -240,8 +240,8 @@ handles.model.animate(newQ);
 
 
 % --- Executes on slider movement.
-function slider6_Callback(hObject, eventdata, handles)
-% hObject    handle to slider6 (see GCBO)
+function joint1_slider_Callback(hObject, eventdata, handles)
+% hObject    handle to joint1_slider (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 
@@ -252,14 +252,14 @@ q = handles.model.getpos;
 current_q1 = get(hObject,'Value');
 q(1) = current_q1;
 handles.model.animate(q);
-set(handles.edit10,'String',num2str(rad2deg(q(1))));
-set(handles.edit11,'String',num2str(rad2deg(q(2))));
-set(handles.edit12,'String',num2str(rad2deg(q(3))));
-set(handles.edit13,'String',num2str(rad2deg(q(4))));
-set(handles.edit14,'String',num2str(rad2deg(q(5))));
+set(handles.joint1,'String',num2str(rad2deg(q(1))));
+set(handles.joint2,'String',num2str(rad2deg(q(2))));
+set(handles.joint3,'String',num2str(rad2deg(q(3))));
+set(handles.joint4,'String',num2str(rad2deg(q(4))));
+set(handles.joint5,'String',num2str(rad2deg(q(5))));
 % --- Executes during object creation, after setting all properties.
-function slider6_CreateFcn(hObject, eventdata, handles)
-% hObject    handle to slider6 (see GCBO)
+function joint1_slider_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to joint1_slider (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    empty - handles not created until after all CreateFcns called
 
@@ -270,19 +270,19 @@ end
 
 
 
-function edit10_Callback(hObject, eventdata, handles)
-% hObject    handle to edit10 (see GCBO)
+function joint1_Callback(hObject, eventdata, handles)
+% hObject    handle to joint1 (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 
-% Hints: get(hObject,'String') returns contents of edit10 as text
-%        str2double(get(hObject,'String')) returns contents of edit10 as a double
+% Hints: get(hObject,'String') returns contents of joint1 as text
+%        str2double(get(hObject,'String')) returns contents of joint1 as a double
 q = handles.model.getpos;
-set(handles.edit10,'String',num2str(q(1)));
+set(handles.joint1,'String',num2str(q(1)));
 
 % --- Executes during object creation, after setting all properties.
-function edit10_CreateFcn(hObject, eventdata, handles)
-% hObject    handle to edit10 (see GCBO)
+function joint1_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to joint1 (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    empty - handles not created until after all CreateFcns called
 
@@ -294,8 +294,8 @@ end
 
 
 % --- Executes on slider movement.
-function slider7_Callback(hObject, eventdata, handles)
-% hObject    handle to slider7 (see GCBO)
+function joint2_slider_Callback(hObject, eventdata, handles)
+% hObject    handle to joint2_slider (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 
@@ -306,15 +306,15 @@ current_q2 = get(hObject,'Value');
 q(2) = current_q2;
 q(4) = pi - q(2) - q(3);
 handles.model.animate(q);
-set(handles.edit10,'String',num2str(rad2deg(q(1))));
-set(handles.edit11,'String',num2str(rad2deg(q(2))));
-set(handles.edit12,'String',num2str(rad2deg(q(3))));
-set(handles.edit13,'String',num2str(rad2deg(q(4))));
-set(handles.edit14,'String',num2str(rad2deg(q(5))));
+set(handles.joint1,'String',num2str(rad2deg(q(1))));
+set(handles.joint2,'String',num2str(rad2deg(q(2))));
+set(handles.joint3,'String',num2str(rad2deg(q(3))));
+set(handles.joint4,'String',num2str(rad2deg(q(4))));
+set(handles.joint5,'String',num2str(rad2deg(q(5))));
 
 % --- Executes during object creation, after setting all properties.
-function slider7_CreateFcn(hObject, eventdata, handles)
-% hObject    handle to slider7 (see GCBO)
+function joint2_slider_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to joint2_slider (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    empty - handles not created until after all CreateFcns called
 
@@ -325,8 +325,8 @@ end
 
 
 % --- Executes on slider movement.
-function slider8_Callback(hObject, eventdata, handles)
-% hObject    handle to slider8 (see GCBO)
+function joint3_slider_Callback(hObject, eventdata, handles)
+% hObject    handle to joint3_slider (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 
@@ -337,15 +337,15 @@ current_q3 = get(hObject,'Value');
 q(3) = current_q3;
 q(4) = pi - q(2) - q(3);
 handles.model.animate(q);
-set(handles.edit10,'String',num2str(rad2deg(q(1))));
-set(handles.edit11,'String',num2str(rad2deg(q(2))));
-set(handles.edit12,'String',num2str(rad2deg(q(3))));
-set(handles.edit13,'String',num2str(rad2deg(q(4))));
-set(handles.edit14,'String',num2str(rad2deg(q(5))));
+set(handles.joint1,'String',num2str(rad2deg(q(1))));
+set(handles.joint2,'String',num2str(rad2deg(q(2))));
+set(handles.joint3,'String',num2str(rad2deg(q(3))));
+set(handles.joint4,'String',num2str(rad2deg(q(4))));
+set(handles.joint5,'String',num2str(rad2deg(q(5))));
 
 % --- Executes during object creation, after setting all properties.
-function slider8_CreateFcn(hObject, eventdata, handles)
-% hObject    handle to slider8 (see GCBO)
+function joint3_slider_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to joint3_slider (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    empty - handles not created until after all CreateFcns called
 
@@ -356,8 +356,8 @@ end
 
 
 % --- Executes on slider movement.
-function slider9_Callback(hObject, eventdata, handles)
-% hObject    handle to slider9 (see GCBO)
+function joint4_slider_Callback(hObject, eventdata, handles)
+% hObject    handle to joint4_slider (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 
@@ -367,15 +367,15 @@ q = handles.model.getpos;
 
 q(4) = pi - q(2) - q(3);
 handles.model.animate(q);
-set(handles.edit10,'String',num2str(rad2deg(q(1))));
-set(handles.edit11,'String',num2str(rad2deg(q(2))));
-set(handles.edit12,'String',num2str(rad2deg(q(3))));
-set(handles.edit13,'String',num2str(rad2deg(q(4))));
-set(handles.edit14,'String',num2str(rad2deg(q(5))));
+set(handles.joint1,'String',num2str(rad2deg(q(1))));
+set(handles.joint2,'String',num2str(rad2deg(q(2))));
+set(handles.joint3,'String',num2str(rad2deg(q(3))));
+set(handles.joint4,'String',num2str(rad2deg(q(4))));
+set(handles.joint5,'String',num2str(rad2deg(q(5))));
 
 % --- Executes during object creation, after setting all properties.
-function slider9_CreateFcn(hObject, eventdata, handles)
-% hObject    handle to slider9 (see GCBO)
+function joint4_slider_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to joint4_slider (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    empty - handles not created until after all CreateFcns called
 
@@ -386,8 +386,8 @@ end
 
 
 % --- Executes on slider movement.
-function slider10_Callback(hObject, eventdata, handles)
-% hObject    handle to slider10 (see GCBO)
+function joint5_slider_Callback(hObject, eventdata, handles)
+% hObject    handle to joint5_slider (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 
@@ -398,14 +398,14 @@ TR = handles.model.fkine(q);
 rpy = tr2rpy(TR);
 q(5) = rpy(3) - q(1);
 handles.model.animate(q);
-set(handles.edit10,'String',num2str(rad2deg(q(1))));
-set(handles.edit11,'String',num2str(rad2deg(q(2))));
-set(handles.edit12,'String',num2str(rad2deg(q(3))));
-set(handles.edit13,'String',num2str(rad2deg(q(4))));
-set(handles.edit14,'String',num2str(rad2deg(q(5))));
+set(handles.joint1,'String',num2str(rad2deg(q(1))));
+set(handles.joint2,'String',num2str(rad2deg(q(2))));
+set(handles.joint3,'String',num2str(rad2deg(q(3))));
+set(handles.joint4,'String',num2str(rad2deg(q(4))));
+set(handles.joint5,'String',num2str(rad2deg(q(5))));
 % --- Executes during object creation, after setting all properties.
-function slider10_CreateFcn(hObject, eventdata, handles)
-% hObject    handle to slider10 (see GCBO)
+function joint5_slider_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to joint5_slider (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    empty - handles not created until after all CreateFcns called
 
@@ -416,18 +416,18 @@ end
 
 
 
-function edit11_Callback(hObject, eventdata, handles)
-% hObject    handle to edit11 (see GCBO)
+function joint2_Callback(hObject, eventdata, handles)
+% hObject    handle to joint2 (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 
-% Hints: get(hObject,'String') returns contents of edit11 as text
-%        str2double(get(hObject,'String')) returns contents of edit11 as a double
+% Hints: get(hObject,'String') returns contents of joint2 as text
+%        str2double(get(hObject,'String')) returns contents of joint2 as a double
 
 
 % --- Executes during object creation, after setting all properties.
-function edit11_CreateFcn(hObject, eventdata, handles)
-% hObject    handle to edit11 (see GCBO)
+function joint2_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to joint2 (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    empty - handles not created until after all CreateFcns called
 
@@ -439,18 +439,18 @@ end
 
 
 
-function edit12_Callback(hObject, eventdata, handles)
-% hObject    handle to edit12 (see GCBO)
+function joint3_Callback(hObject, eventdata, handles)
+% hObject    handle to joint3 (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 
-% Hints: get(hObject,'String') returns contents of edit12 as text
-%        str2double(get(hObject,'String')) returns contents of edit12 as a double
+% Hints: get(hObject,'String') returns contents of joint3 as text
+%        str2double(get(hObject,'String')) returns contents of joint3 as a double
 
 
 % --- Executes during object creation, after setting all properties.
-function edit12_CreateFcn(hObject, eventdata, handles)
-% hObject    handle to edit12 (see GCBO)
+function joint3_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to joint3 (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    empty - handles not created until after all CreateFcns called
 
@@ -462,17 +462,17 @@ end
 
 
 
-function edit13_Callback(hObject, eventdata, handles)
-% hObject    handle to edit13 (see GCBO)
+function joint4_Callback(hObject, eventdata, handles)
+% hObject    handle to joint4 (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 
-% Hints: get(hObject,'String') returns contents of edit13 as text
-%        str2double(get(hObject,'String')) returns contents of edit13 as a double
+% Hints: get(hObject,'String') returns contents of joint4 as text
+%        str2double(get(hObject,'String')) returns contents of joint4 as a double
 
 % --- Executes during object creation, after setting all properties.
-function edit13_CreateFcn(hObject, eventdata, handles)
-% hObject    handle to edit13 (see GCBO)
+function joint4_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to joint4 (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    empty - handles not created until after all CreateFcns called
 
@@ -484,18 +484,18 @@ end
 
 
 
-function edit14_Callback(hObject, eventdata, handles)
-% hObject    handle to edit14 (see GCBO)
+function joint5_Callback(hObject, eventdata, handles)
+% hObject    handle to joint5 (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 
-% Hints: get(hObject,'String') returns contents of edit14 as text
-%        str2double(get(hObject,'String')) returns contents of edit14 as a double
+% Hints: get(hObject,'String') returns contents of joint5 as text
+%        str2double(get(hObject,'String')) returns contents of joint5 as a double
 
 
 % --- Executes during object creation, after setting all properties.
-function edit14_CreateFcn(hObject, eventdata, handles)
-% hObject    handle to edit14 (see GCBO)
+function joint5_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to joint5 (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    empty - handles not created until after all CreateFcns called
 
@@ -512,9 +512,9 @@ function Stop_Callback(hObject, eventdata, handles)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 uiwait(Dobot_guide);
-% --- Executes on button press in pushbutton20.
-function pushbutton20_Callback(hObject, eventdata, handles)
-% hObject    handle to pushbutton20 (see GCBO)
+% --- Executes on button press in Continue.
+function Continue_Callback(hObject, eventdata, handles)
+% hObject    handle to Continue (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 uiresume(Dobot_guide);
