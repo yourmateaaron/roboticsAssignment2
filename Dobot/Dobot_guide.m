@@ -92,8 +92,8 @@ PlaceObject('Table.ply',[0,0,0]);
 PlaceObject('Fence.ply',[0,0,-1]);
 PlaceObject('Human.ply',[0,0,-1]);
 PlaceObject('polesy.ply',[0,0,-1]);
-PlaceObject('sponge.ply',[-0.0163,   -0.2991,    0]);
-PlaceObject('EStop.ply',[0.3,0.3,0]);
+PlaceObject('sponge.ply',[-0.0163,   -0.2991,    0.03]);
+PlaceObject('EStop.ply',[-0.3,-0.3,0]);
 PlaceObject('WarningSign.ply',[0,0,-1]);
 PlaceObject('Siren.ply',[0,0,-1]);
 % Base
@@ -1135,7 +1135,7 @@ function simu_env_Callback(hObject, eventdata, handles)
 
 % Hint: get(hObject,'Value') returns toggle state of simu_env
 cubeCenter_cage = [0, 0, 0];
-cubeSides_cage = 1;
+cubeSides_cage = 2;
 
 plotOptions.plotEdges = true;
 [vertex_cage,faces_cage,faceNormals_cage] = RectangularPrism(cubeCenter_cage-cubeSides_cage/2, cubeCenter_cage+cubeSides_cage/2,plotOptions);
