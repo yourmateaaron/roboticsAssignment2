@@ -4,8 +4,8 @@ function [q_model, q_real] = IKdobot_inputTransform(TR)
     d1 = 0.138;
     a2 = 0.135;
     a3 = 0.147;
-    a4 = 0.044;
-    d5 = -0.138;
+    a4 = 0.04;
+    d5 = -0.13;
     
     % Extract position and rotation
     x = TR(1,4);
