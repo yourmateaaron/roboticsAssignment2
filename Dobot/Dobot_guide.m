@@ -92,7 +92,7 @@ PlaceObject('Table.ply',[0,0,0]);
 PlaceObject('Fence.ply',[0,0,-1]);
 PlaceObject('Human.ply',[0,0,-1]);
 PlaceObject('polesy.ply',[0,0,-1]);
-PlaceObject('sponge.ply',[0,0,0]);
+PlaceObject('sponge.ply',[-0.0163,   -0.2991,    0]);
 PlaceObject('EStop.ply',[0.3,-0.3,0]);
 PlaceObject('WarningSign.ply',[0,0,-1]);
 PlaceObject('Siren.ply',[0,0,-1]);
@@ -619,6 +619,7 @@ function wipeAll_Callback(hObject, eventdata, handles)
 % hObject    handle to wipeAll (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
+handles = guidata(hObject);
 end_effector_rotation = [0,0,0];
 
 % Cordinates: XYZ
