@@ -1087,7 +1087,11 @@ function simu_inter_Callback(hObject, eventdata, handles)
 % handles    structure with handles and user data (see GUIDATA)
 
 % Hint: get(hObject,'Value') returns toggle state of simu_inter
+<<<<<<< HEAD
 cubeCenter_int = [1, 1, 0];
+=======
+cubeCenter_int = [1, 1, 1];
+>>>>>>> ce2a36bba80cf1d60d0cc49f34222b7254e17858
 cubeSides_int = 0.5;
 
 plotOptions.plotFaces = true;
