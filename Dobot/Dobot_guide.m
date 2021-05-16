@@ -14,7 +14,7 @@ function varargout = Dobot_guide(varargin)
 %      existing singleton*.  Starting from the left, property value pairs are
 %      applied to the GUI before Dobot_guide_OpeningFcn gets called.  An
 %      unrecognized property name or invalid value makes property application
-%      stop.  All inputs are passed to Dobot_guide_OpeningFcn via varargin.
+%      estop.  All inputs are passed to Dobot_guide_OpeningFcn via varargin.
 %
 %      *See GUI Options on GUIDE's Tools menu.  Choose "GUI allows only one
 %      instance to run (singleton)".
@@ -23,7 +23,7 @@ function varargout = Dobot_guide(varargin)
 
 % Edit the above text to modify the response to help Dobot_guide
 
-% Last Modified by GUIDE v2.5 16-May-2021 06:31:31
+% Last Modified by GUIDE v2.5 16-May-2021 23:59:42
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -84,28 +84,11 @@ function pushbutton1_Callback(hObject, eventdata, handles)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 axes(handles.axes1);
-    L(1) = Link('d',0.138,  'a',0,      'alpha',-pi/2, 'offset',0);
-    L(2) = Link('d',0,      'a',0.135,  'alpha',0,     'offset',-pi/2);
-    L(3) = Link('d',0,      'a',0.147,  'alpha',0,     'offset',0);
-    L(4) = Link('d',0,      'a',0.0597,  'alpha',pi/2,  'offset',-pi/2);     
-    L(5) = Link('d',0,      'a',0,      'alpha',0,     'offset',0);
-
-    % Joint Limits
-    L(1).qlim = [-135 135]*pi/180;
-    L(2).qlim = [5 80]*pi/180;
-    L(3).qlim = [15 170]*pi/180;
-    L(4).qlim = [-90 90]*pi/180;
-    L(5).qlim = [-85 85]*pi/180;
-
-    model = SerialLink(L,'name','Dobot');
-    workspace = [-1 1 -1 1 -0.3 1];
-    scale = 0.5;
-    qhome = [0    0.1166    1.4480    1.5770         0];
-    model.plot(qhome,'noarrow','workspace',workspace,'scale',scale);
-    view([45 30]);
-    data = guidata(hObject);
-    data.model = model;
-    guidata(hObject,data)
+dobot = Dobot();
+dobot.PlotRobot();
+data = guidata(hObject);
+data.model = dobot.model;
+guidata(hObject,data);
 
 
 % --------------------------------------------------------------------
@@ -181,7 +164,14 @@ q = handles.model.getpos;
 tr = handles.model.fkine(q);
 tr(1,4) = tr(1,4) + 0.01;
 newQ = handles.model.ikcon(tr,q);
+current_x_data = num2str(tr(1,4));
+current_y_data = num2str(tr(2,4));
+current_z_data = num2str(tr(3,4));
+set(handles.current_x,'String',current_x_data);
+set(handles.current_y,'String',current_y_data);
+set(handles.current_z,'String',current_z_data);
 handles.model.animate(newQ);
+
 
 % --- Executes on button press in pushbutton3.
 function pushbutton3_Callback(hObject, eventdata, handles)
@@ -192,7 +182,14 @@ q = handles.model.getpos;
 tr = handles.model.fkine(q);
 tr(1,4) = tr(1,4) - 0.01;
 newQ = handles.model.ikcon(tr,q);
+current_x_data = num2str(tr(1,4));
+current_y_data = num2str(tr(2,4));
+current_z_data = num2str(tr(3,4));
+set(handles.current_x,'String',current_x_data);
+set(handles.current_y,'String',current_y_data);
+set(handles.current_z,'String',current_z_data);
 handles.model.animate(newQ);
+
 
 % --- Executes on button press in pushbutton4.
 function pushbutton4_Callback(hObject, eventdata, handles)
@@ -203,7 +200,14 @@ q = handles.model.getpos;
 tr = handles.model.fkine(q);
 tr(2,4) = tr(2,4) + 0.01;
 newQ = handles.model.ikcon(tr,q);
+current_x_data = num2str(tr(1,4));
+current_y_data = num2str(tr(2,4));
+current_z_data = num2str(tr(3,4));
+set(handles.current_x,'String',current_x_data);
+set(handles.current_y,'String',current_y_data);
+set(handles.current_z,'String',current_z_data);
 handles.model.animate(newQ);
+
 
 % --- Executes on button press in pushbutton5.
 function pushbutton5_Callback(hObject, eventdata, handles)
@@ -214,6 +218,12 @@ q = handles.model.getpos;
 tr = handles.model.fkine(q);
 tr(2,4) = tr(2,4) - 0.01;
 newQ = handles.model.ikcon(tr,q);
+current_x_data = num2str(tr(1,4));
+current_y_data = num2str(tr(2,4));
+current_z_data = num2str(tr(3,4));
+set(handles.current_x,'String',current_x_data);
+set(handles.current_y,'String',current_y_data);
+set(handles.current_z,'String',current_z_data);
 handles.model.animate(newQ);
 
 % --- Executes on button press in pushbutton6.
@@ -225,6 +235,12 @@ q = handles.model.getpos;
 tr = handles.model.fkine(q);
 tr(3,4) = tr(3,4) + 0.01;
 newQ = handles.model.ikcon(tr,q);
+current_x_data = num2str(tr(1,4));
+current_y_data = num2str(tr(2,4));
+current_z_data = num2str(tr(3,4));
+set(handles.current_x,'String',current_x_data);
+set(handles.current_y,'String',current_y_data);
+set(handles.current_z,'String',current_z_data);
 handles.model.animate(newQ);
 
 % --- Executes on button press in pushbutton7.
@@ -234,8 +250,14 @@ function pushbutton7_Callback(hObject, eventdata, handles)
 % handles    structure with handles and user data (see GUIDATA)
 q = handles.model.getpos;
 tr = handles.model.fkine(q);
-tr(3,4) = tr(3,4) + 0.01;
+tr(3,4) = tr(3,4) - 0.01;
 newQ = handles.model.ikcon(tr,q);
+current_x_data = num2str(tr(1,4));
+current_y_data = num2str(tr(2,4));
+current_z_data = num2str(tr(3,4));
+set(handles.current_x,'String',current_x_data);
+set(handles.current_y,'String',current_y_data);
+set(handles.current_z,'String',current_z_data);
 handles.model.animate(newQ);
 
 
@@ -257,6 +279,13 @@ set(handles.joint2,'String',num2str(rad2deg(q(2))));
 set(handles.joint3,'String',num2str(rad2deg(q(3))));
 set(handles.joint4,'String',num2str(rad2deg(q(4))));
 set(handles.joint5,'String',num2str(rad2deg(q(5))));
+tr = handles.model.fkine(q);
+current_x_data = num2str(tr(1,4));
+current_y_data = num2str(tr(2,4));
+current_z_data = num2str(tr(3,4));
+set(handles.current_x,'String',current_x_data);
+set(handles.current_y,'String',current_y_data);
+set(handles.current_z,'String',current_z_data);
 % --- Executes during object creation, after setting all properties.
 function joint1_slider_CreateFcn(hObject, eventdata, handles)
 % hObject    handle to joint1_slider (see GCBO)
@@ -277,8 +306,7 @@ function joint1_Callback(hObject, eventdata, handles)
 
 % Hints: get(hObject,'String') returns contents of joint1 as text
 %        str2double(get(hObject,'String')) returns contents of joint1 as a double
-q = handles.model.getpos;
-set(handles.joint1,'String',num2str(q(1)));
+
 
 % --- Executes during object creation, after setting all properties.
 function joint1_CreateFcn(hObject, eventdata, handles)
@@ -311,6 +339,13 @@ set(handles.joint2,'String',num2str(rad2deg(q(2))));
 set(handles.joint3,'String',num2str(rad2deg(q(3))));
 set(handles.joint4,'String',num2str(rad2deg(q(4))));
 set(handles.joint5,'String',num2str(rad2deg(q(5))));
+tr = handles.model.fkine(q);
+current_x_data = num2str(tr(1,4));
+current_y_data = num2str(tr(2,4));
+current_z_data = num2str(tr(3,4));
+set(handles.current_x,'String',current_x_data);
+set(handles.current_y,'String',current_y_data);
+set(handles.current_z,'String',current_z_data);
 
 % --- Executes during object creation, after setting all properties.
 function joint2_slider_CreateFcn(hObject, eventdata, handles)
@@ -342,6 +377,13 @@ set(handles.joint2,'String',num2str(rad2deg(q(2))));
 set(handles.joint3,'String',num2str(rad2deg(q(3))));
 set(handles.joint4,'String',num2str(rad2deg(q(4))));
 set(handles.joint5,'String',num2str(rad2deg(q(5))));
+tr = handles.model.fkine(q);
+current_x_data = num2str(tr(1,4));
+current_y_data = num2str(tr(2,4));
+current_z_data = num2str(tr(3,4));
+set(handles.current_x,'String',current_x_data);
+set(handles.current_y,'String',current_y_data);
+set(handles.current_z,'String',current_z_data);
 
 % --- Executes during object creation, after setting all properties.
 function joint3_slider_CreateFcn(hObject, eventdata, handles)
@@ -372,6 +414,13 @@ set(handles.joint2,'String',num2str(rad2deg(q(2))));
 set(handles.joint3,'String',num2str(rad2deg(q(3))));
 set(handles.joint4,'String',num2str(rad2deg(q(4))));
 set(handles.joint5,'String',num2str(rad2deg(q(5))));
+tr = handles.model.fkine(q);
+current_x_data = num2str(tr(1,4));
+current_y_data = num2str(tr(2,4));
+current_z_data = num2str(tr(3,4));
+set(handles.current_x,'String',current_x_data);
+set(handles.current_y,'String',current_y_data);
+set(handles.current_z,'String',current_z_data);
 
 % --- Executes during object creation, after setting all properties.
 function joint4_slider_CreateFcn(hObject, eventdata, handles)
@@ -403,6 +452,13 @@ set(handles.joint2,'String',num2str(rad2deg(q(2))));
 set(handles.joint3,'String',num2str(rad2deg(q(3))));
 set(handles.joint4,'String',num2str(rad2deg(q(4))));
 set(handles.joint5,'String',num2str(rad2deg(q(5))));
+tr = handles.model.fkine(q);
+current_x_data = num2str(tr(1,4));
+current_y_data = num2str(tr(2,4));
+current_z_data = num2str(tr(3,4));
+set(handles.current_x,'String',current_x_data);
+set(handles.current_y,'String',current_y_data);
+set(handles.current_z,'String',current_z_data);
 % --- Executes during object creation, after setting all properties.
 function joint5_slider_CreateFcn(hObject, eventdata, handles)
 % hObject    handle to joint5_slider (see GCBO)
@@ -506,71 +562,701 @@ if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgr
 end
 
 
-% --- Executes on button press in Stop.
-function Stop_Callback(hObject, eventdata, handles)
-% hObject    handle to Stop (see GCBO)
+% --- Executes on button press in eStop.
+function eStop_Callback(hObject, eventdata, handles)
+% hObject    handle to eStop (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
+handles.eStopState = 1
+guidata(hObject,handles)
+disp('E-STOP ACTIVATED');
+stopMsg = 'E-STOP ACTIVATED';
+set(handles.robot_status,'String',stopMsg);
 uiwait(Dobot_guide);
 % --- Executes on button press in Continue.
 function Continue_Callback(hObject, eventdata, handles)
 % hObject    handle to Continue (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
-uiresume(Dobot_guide);
+handles = guidata(hObject);
+if (handles.eStopState == 2)
+    handles.eStopState = 0
+    guidata(hObject,handles);
+    disp('ROBOT OPERATION RESUMED');
+     stopMsg = 'ROBOT OPERATION RESUMED';
+set(handles.robot_status,'String',stopMsg);
+    uiresume(Dobot_guide);
+elseif(handles.eStopState == 0)
+    disp('ROBOT IS OPERATING');
+    stopMsg = 'ROBOT IS OPERATING';
+set(handles.robot_status,'String',stopMsg);
+else
+    disp('RELEASE E-STOP FIRST');
+     stopMsg = 'RELEASE E-STOP FIRST';
+set(handles.robot_status,'String',stopMsg);
+end
 
 % --- Executes on button press in wipeAll.
 function wipeAll_Callback(hObject, eventdata, handles)
 % hObject    handle to wipeAll (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
+end_effector_rotation = [0,0,0];
 
-steps = 25;   % No. of steps for simulation
-delta = 2*pi/steps; % Small angle change
-qMatrix = zeros(steps,5);
+% Cordinates: XYZ
+waypointCoords{1} = [0.2067         0    0.1350];        % q = zeros(1,4)
+waypointCoords{2} = [0.1710   -0.1177    0.1376];
+waypointCoords{3} = [0.0882   -0.1875    0.1383];
+waypointCoords{4} = [-0.0078   -0.2064    0.1379];
+waypointCoords{5} = [-0.0145   -0.2993    0.09];       % right above sponge
+waypointCoords{6} = [-0.0163   -0.2991    0.03];       % ready to close gripper
+waypointCoords{7} = [0.2057   -0.2312    0.037]; 
+waypointCoords{8} = [0.2057   0.2312    0.037];
 
- 
-
-% Wiping locations
-wipeHeight = 0.126;           % height of surface above base of dobot
-% Wiping areas
-wipeCenter{1} = [0.125, 0.2];
-wipeCenter{2} = [0.225, 0];
-wipeCenter{3} = [0.125, -0.2];
-
- 
-
-wipeRadiusIncrement = 0.03;
-wipeRadiusMin = 0.03;
-wipeRadiusMax = 0.09;
-
- 
-
-for a=1:length(wipeCenter)
-    for wipeRadius=wipeRadiusMin:wipeRadiusIncrement:wipeRadiusMax     % wipe in circles of increasing size
-        for i=1:steps
-            x(1,i) = wipeCenter{a}(1) + wipeRadius*sin(delta*i);
-            x(2,i) = wipeCenter{a}(2) + wipeRadius*cos(delta*i);
-            x(3,i) = wipeHeight;                     
-            theta(1,i) = 0;                     % Roll angle 
-            theta(2,i) = 0;                     % Pitch angle
-            theta(3,i) = 0;                     % Yaw angle
-            T = [rpy2r(theta(1,i),theta(2,i),theta(3,i)) x(:,i);    % create transformation of first point and angle
-                zeros(1,3)  1 ];
-            qMatrix(i,:) = IKdobot_inputTransform(T);
-%             qMatrix(i,:) = dobot.model.ikcon(T)
-        end
-
- 
-
-        handles.model.plot(qMatrix,'trail','r-');
-    end
+% Poses: TR
+for i=1:length(waypointCoords)
+    waypointPoses{i} = eul2tr(end_effector_rotation) * transl(waypointCoords{i}(1),waypointCoords{i}(2),waypointCoords{i}(3));
 end
-            
+steps = 20;
 
+wipeSequence = [1,4,6,4,1,7,8,7,8];
+
+for k=1:length(wipeSequence)
+    
+    T1 = waypointPoses{wipeSequence(k)};
+    if(i == length(wipeSequence))
+        T2 = waypointPoses{1};
+    else
+        T2 = waypointPoses{wipeSequence(k+1)};
+    end
+    
+    
+    q1 = IKdobot_inputTransform(T1);
+    q2 = IKdobot_inputTransform(T2);
+    qMatrix = jtraj(q1,q2,steps);
+    result = true(steps,1);     %create a logical vector
+    robotInCollision = false;
+    int_collision = false;
+% go through each step of the trajectory and check the result to see if it is in collision
+for a = 1: steps
+    result(a) = false;
+    q = qMatrix(a,:);
+    tr = zeros(4,4,handles.model.n+1);
+    tr(:,:,1) = handles.model.base;
+    L = handles.model.links;
+    for b = 1:handles.model.n
+         tr(:,:,b+1) = tr(:,:,b) * trotz(q(b)+L(b).offset) * transl(0,0,L(b).d) * transl(L(b).a,0,0) * trotx(L(b).alpha);
+    end
+    % Get the transform of every joint (i.e. start and end of every link)
+        for i = 1:size(tr,3)-1
+             if get(handles.simu_colli,'Value')==1
+                 guidata(hObject,handles);
+                for faceIndex = 1:size(handles.cube.faces,1)
+                    vertOnPlane = handles.cube.vertex(handles.cube.faces(faceIndex,1)',:);
+                    [intersectP,check] = LinePlaneIntersection(handles.cube.faceNormals(faceIndex,:),vertOnPlane,tr(1:3,4,i)',tr(1:3,4,i+1)'); 
+                    if check==1 && IsIntersectionPointInsideTriangle(intersectP,handles.cube.vertex(handles.cube.faces(faceIndex,:)',:))
+                        plot3(intersectP(1),intersectP(2),intersectP(3),'*g');
+    %                     display('intersection');
+                        result = true;      % set step of logical vector true if incollision
+                        robotInCollision = true;
+                    end
+                end
+%              elseif get(handles.simu_colli,'Value')==0
+%                  
+%                  continue;
+                 
+             end   
+        end
+        if get(handles.simu_env,'Value')== 1 && get(handles.simu_inter,'Value') == 1
+        for faceIndex_int = 1:size(handles.inter.faces_int,1)-1
+        for faceIndex_cage = 1:size(handles.cage.faces_cage,1)
+ 
+                vertOnPlane_cage = handles.cage.vertex_cage(handles.cage.faces_cage(faceIndex_cage,1)',:);      % simulated cage cube
+                vertOnPlane_int_1 = handles.inter.vertex_int(handles.inter.faces_int(faceIndex_int,1)',:);         % simulated interupt object cube
+                vertOnPlane_int_2 = handles.inter.vertex_int(handles.inter.faces_int(faceIndex_int,2)',:);
+        
+                [intersectP,check] = LinePlaneIntersection(handles.cage.faceNormals_cage(faceIndex_cage,:),vertOnPlane_cage,vertOnPlane_int_1,vertOnPlane_int_2); 
+                if check==1 && IsIntersectionPointInsideTriangle(intersectP,handles.cage.vertex_cage(handles.cage.faces_cage(faceIndex_cage,:)',:))
+                    result = true;
+                    int_collision = true;
+                    
+                end
+                end
+        end
+        end
+     if robotInCollision == true || int_collision ==true
+        disp('Collision Detected or Environment is unsafe');
+        return;
+     else
+        handles.model.animate(qMatrix(a,:));     
+        disp('Robot is operating safely');        
+     end
+
+end
+  
+end
   
          
    
+    
+% --- Executes on button press in wipe_area_1.
+function wipe_area_1_Callback(hObject, eventdata, handles)
+% hObject    handle to wipe_area_1 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+steps = 50;   % No. of steps for simulation
+delta = 2*pi/steps; % Small angle change
+qMatrix = zeros(steps,5);
+
+wipeLocation = [0.225 0];
+wipeRadius = [0.03,0.1];
+wipeHeight = 0.037;
+
+for i=1:steps
+    x(1,i) = wipeLocation(1) + wipeRadius(1)*sin(delta*i);
+    x(2,i) = wipeLocation(2) + wipeRadius(2)*cos(delta*i);
+    x(3,i) = wipeHeight    ;                 
+    theta(1,i) = 0;                     % Roll angle 
+    theta(2,i) = 0;                     % Pitch angle
+    theta(3,i) = 0;                     % Yaw angle
+    T = [rpy2r(theta(1,i),theta(2,i),theta(3,i)) x(:,i);    % create transformation of first point and angle
+        zeros(1,3)  1 ];
+    qMatrix(i,:) = IKdobot_inputTransform(T);    
+end
+ result = true(steps,1);     %create a logical vector
+    robotInCollision = false;
+    int_collision = false;
+% go through each step of the trajectory and check the result to see if it is in collision
+for a = 1: steps
+    result(a) = false;
+    q = qMatrix(a,:);
+    tr = zeros(4,4,handles.model.n+1);
+    tr(:,:,1) = handles.model.base;
+    L = handles.model.links;
+    for b = 1:handles.model.n
+         tr(:,:,b+1) = tr(:,:,b) * trotz(q(b)+L(b).offset) * transl(0,0,L(b).d) * transl(L(b).a,0,0) * trotx(L(b).alpha);
+    end
+    % Get the transform of every joint (i.e. start and end of every link)
+        for i = 1:size(tr,3)-1
+             if get(handles.simu_colli,'Value')==1
+                 guidata(hObject,handles);
+                for faceIndex = 1:size(handles.cube.faces,1)
+                    vertOnPlane = handles.cube.vertex(handles.cube.faces(faceIndex,1)',:);
+                    [intersectP,check] = LinePlaneIntersection(handles.cube.faceNormals(faceIndex,:),vertOnPlane,tr(1:3,4,i)',tr(1:3,4,i+1)'); 
+                    if check==1 && IsIntersectionPointInsideTriangle(intersectP,handles.cube.vertex(handles.cube.faces(faceIndex,:)',:))
+                        plot3(intersectP(1),intersectP(2),intersectP(3),'*g');
+    %                     display('intersection');
+                        result = true;      % set step of logical vector true if incollision
+                        robotInCollision = true;
+                    end
+                end
+%              elseif get(handles.simu_colli,'Value')==0
+%                  
+%                  continue;
+                 
+             end   
+        end
+        if get(handles.simu_env,'Value')== 1 && get(handles.simu_inter,'Value') == 1
+        for faceIndex_int = 1:size(handles.inter.faces_int,1)-1
+        for faceIndex_cage = 1:size(handles.cage.faces_cage,1)
+ 
+                vertOnPlane_cage = handles.cage.vertex_cage(handles.cage.faces_cage(faceIndex_cage,1)',:);      % simulated cage cube
+                vertOnPlane_int_1 = handles.inter.vertex_int(handles.inter.faces_int(faceIndex_int,1)',:);         % simulated interupt object cube
+                vertOnPlane_int_2 = handles.inter.vertex_int(handles.inter.faces_int(faceIndex_int,2)',:);
         
+                [intersectP,check] = LinePlaneIntersection(handles.cage.faceNormals_cage(faceIndex_cage,:),vertOnPlane_cage,vertOnPlane_int_1,vertOnPlane_int_2); 
+                if check==1 && IsIntersectionPointInsideTriangle(intersectP,handles.cage.vertex_cage(handles.cage.faces_cage(faceIndex_cage,:)',:))
+                    result = true;
+                    int_collision = true;
+                    
+                end
+                end
+        end
+        end
+     if robotInCollision == true || int_collision ==true
+        disp('Collision Detected or Environment is unsafe');
+        return;
+     else
+        handles.model.animate(qMatrix(a,:));     
+        disp('Robot is operating safely');        
+     end
+
+end
+  
+
+
+
+% --- Executes on button press in wipe_area_2.
+function wipe_area_2_Callback(hObject, eventdata, handles)
+% hObject    handle to wipe_area_2 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+steps = 50;   % No. of steps for simulation
+delta = 2*pi/steps; % Small angle change
+qMatrix = zeros(steps,5);
+
+wipeLocation = [0 0.2];
+wipeRadius = [0.1,0.03];
+wipeHeight = 0.037;
+
+for i=1:steps
+    x(1,i) = wipeLocation(1) + wipeRadius(1)*sin(delta*i);
+    x(2,i) = wipeLocation(2) + wipeRadius(2)*cos(delta*i);
+    x(3,i) = wipeHeight  ;                   
+    theta(1,i) = 0;                     % Roll angle 
+    theta(2,i) = 0;                     % Pitch angle
+    theta(3,i) = 0;                     % Yaw angle
+    T = [rpy2r(theta(1,i),theta(2,i),theta(3,i)) x(:,i);    % create transformation of first point and angle
+        zeros(1,3)  1 ];
+    qMatrix(i,:) = IKdobot_inputTransform(T);
+%     qMatrix(i,:) = dobot.model.ikcon(T)
+end
+
+    robotInCollision = false;
+    int_collision = false;
+% go through each step of the trajectory and check the result to see if it is in collision
+for a = 1: steps
+    result(a) = false;
+    q = qMatrix(a,:);
+    tr = zeros(4,4,handles.model.n+1);
+    tr(:,:,1) = handles.model.base;
+    L = handles.model.links;
+    for b = 1:handles.model.n
+         tr(:,:,b+1) = tr(:,:,b) * trotz(q(b)+L(b).offset) * transl(0,0,L(b).d) * transl(L(b).a,0,0) * trotx(L(b).alpha);
+    end
+    % Get the transform of every joint (i.e. start and end of every link)
+        for i = 1:size(tr,3)-1
+             if get(handles.simu_colli,'Value')==1
+                 guidata(hObject,handles);
+                for faceIndex = 1:size(handles.cube.faces,1)
+                    vertOnPlane = handles.cube.vertex(handles.cube.faces(faceIndex,1)',:);
+                    [intersectP,check] = LinePlaneIntersection(handles.cube.faceNormals(faceIndex,:),vertOnPlane,tr(1:3,4,i)',tr(1:3,4,i+1)'); 
+                    if check==1 && IsIntersectionPointInsideTriangle(intersectP,handles.cube.vertex(handles.cube.faces(faceIndex,:)',:))
+                        plot3(intersectP(1),intersectP(2),intersectP(3),'*g');
+    %                     display('intersection');
+                        result = true;      % set step of logical vector true if incollision
+                        robotInCollision = true;
+                    end
+                end
+%              elseif get(handles.simu_colli,'Value')==0
+%                  
+%                  continue;
+                 
+             end   
+        end
+        if get(handles.simu_env,'Value')== 1 && get(handles.simu_inter,'Value') == 1
+        for faceIndex_int = 1:size(handles.inter.faces_int,1)-1
+        for faceIndex_cage = 1:size(handles.cage.faces_cage,1)
+ 
+                vertOnPlane_cage = handles.cage.vertex_cage(handles.cage.faces_cage(faceIndex_cage,1)',:);      % simulated cage cube
+                vertOnPlane_int_1 = handles.inter.vertex_int(handles.inter.faces_int(faceIndex_int,1)',:);         % simulated interupt object cube
+                vertOnPlane_int_2 = handles.inter.vertex_int(handles.inter.faces_int(faceIndex_int,2)',:);
         
+                [intersectP,check] = LinePlaneIntersection(handles.cage.faceNormals_cage(faceIndex_cage,:),vertOnPlane_cage,vertOnPlane_int_1,vertOnPlane_int_2); 
+                if check==1 && IsIntersectionPointInsideTriangle(intersectP,handles.cage.vertex_cage(handles.cage.faces_cage(faceIndex_cage,:)',:))
+                    result = true;
+                    int_collision = true;
+                    
+                end
+                end
+        end
+        end
+     if robotInCollision == true || int_collision ==true
+        disp('Collision Detected or Environment is unsafe');
+        return;
+     else
+        handles.model.animate(qMatrix(a,:));     
+        disp('Robot is operating safely');        
+     end
+
+end
+
+
+% --- Executes on button press in wipe_area_3.
+function wipe_area_3_Callback(hObject, eventdata, handles)
+% hObject    handle to wipe_area_3 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+steps = 50;   % No. of steps for simulation
+delta = 2*pi/steps; % Small angle change
+qMatrix = zeros(steps,5);
+
+wipeLocation = [-0.2 -0.2];
+wipeRadius = [0.01,0.03];
+wipeHeight = 0.037;
+
+for i=1:steps
+    x(1,i) = wipeLocation(1) + wipeRadius(1)*sin(delta*i);
+    x(2,i) = wipeLocation(2) + wipeRadius(2)*cos(delta*i);
+    x(3,i) = wipeHeight  ;                   
+    theta(1,i) = 0;                     % Roll angle 
+    theta(2,i) = 0;                     % Pitch angle
+    theta(3,i) = 0;                     % Yaw angle
+    T = [rpy2r(theta(1,i),theta(2,i),theta(3,i)) x(:,i);    % create transformation of first point and angle
+        zeros(1,3)  1 ];
+    qMatrix(i,:) = IKdobot_inputTransform(T);
+%     qMatrix(i,:) = dobot.model.ikcon(T)
+end
+
+    robotInCollision = false;
+    int_collision = false;
+% go through each step of the trajectory and check the result to see if it is in collision
+for a = 1: steps
+    result(a) = false;
+    q = qMatrix(a,:);
+    tr = zeros(4,4,handles.model.n+1);
+    tr(:,:,1) = handles.model.base;
+    L = handles.model.links;
+    for b = 1:handles.model.n
+         tr(:,:,b+1) = tr(:,:,b) * trotz(q(b)+L(b).offset) * transl(0,0,L(b).d) * transl(L(b).a,0,0) * trotx(L(b).alpha);
+    end
+    % Get the transform of every joint (i.e. start and end of every link)
+        for i = 1:size(tr,3)-1
+             if get(handles.simu_colli,'Value')==1
+                 guidata(hObject,handles);
+                for faceIndex = 1:size(handles.cube.faces,1)
+                    vertOnPlane = handles.cube.vertex(handles.cube.faces(faceIndex,1)',:);
+                    [intersectP,check] = LinePlaneIntersection(handles.cube.faceNormals(faceIndex,:),vertOnPlane,tr(1:3,4,i)',tr(1:3,4,i+1)'); 
+                    if check==1 && IsIntersectionPointInsideTriangle(intersectP,handles.cube.vertex(handles.cube.faces(faceIndex,:)',:))
+                        plot3(intersectP(1),intersectP(2),intersectP(3),'*g');
+    %                     display('intersection');
+                        result = true;      % set step of logical vector true if incollision
+                        robotInCollision = true;
+                    end
+                end
+%              elseif get(handles.simu_colli,'Value')==0
+%                  
+%                  continue;
+                 
+             end   
+        end
+        if get(handles.simu_env,'Value')== 1 && get(handles.simu_inter,'Value') == 1
+        for faceIndex_int = 1:size(handles.inter.faces_int,1)-1
+        for faceIndex_cage = 1:size(handles.cage.faces_cage,1)
+ 
+                vertOnPlane_cage = handles.cage.vertex_cage(handles.cage.faces_cage(faceIndex_cage,1)',:);      % simulated cage cube
+                vertOnPlane_int_1 = handles.inter.vertex_int(handles.inter.faces_int(faceIndex_int,1)',:);         % simulated interupt object cube
+                vertOnPlane_int_2 = handles.inter.vertex_int(handles.inter.faces_int(faceIndex_int,2)',:);
         
+                [intersectP,check] = LinePlaneIntersection(handles.cage.faceNormals_cage(faceIndex_cage,:),vertOnPlane_cage,vertOnPlane_int_1,vertOnPlane_int_2); 
+                if check==1 && IsIntersectionPointInsideTriangle(intersectP,handles.cage.vertex_cage(handles.cage.faces_cage(faceIndex_cage,:)',:))
+                    result = true;
+                    int_collision = true;
+                    
+                end
+                end
+        end
+        end
+     if robotInCollision == true || int_collision ==true
+        disp('Collision Detected or Environment is unsafe');
+        return;
+     else
+        handles.model.animate(qMatrix(a,:));     
+        disp('Robot is operating safely');        
+     end
+
+end
+
+
+% --- Executes on button press in pick_up_spone.
+function pick_up_spone_Callback(hObject, eventdata, handles)
+% hObject    handle to pick_up_spone (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+guidata(hObject,handles);
+
+
+end_effector_rotation = [0,0,0];
+
+% Cordinates: XYZ
+waypointCoords{1} = [0.2067         0    0.1350];        % q = zeros(1,4)
+waypointCoords{2} = [0.1710   -0.1177    0.1376];
+waypointCoords{3} = [0.0882   -0.1875    0.1383];
+waypointCoords{4} = [-0.0078   -0.2064    0.1379];
+waypointCoords{5} = [-0.0145   -0.2993    0.09];       % right above sponge
+waypointCoords{6} = [-0.0163   -0.2991    0.03];       % ready to close gripper
+waypointCoords{7} = [0.2057   -0.2312    0.037]; 
+waypointCoords{8} = [0.2057   0.2312    0.037];
+
+% Poses: TR
+for i=1:length(waypointCoords)
+    waypointPoses{i} = eul2tr(end_effector_rotation) * transl(waypointCoords{i}(1),waypointCoords{i}(2),waypointCoords{i}(3));
+end
+
+steps = 20;
+
+% define the transformations for two poses
+T1 = waypointPoses{1};      % first pose
+T2 = waypointPoses{6};      % second pose
+
+% use custom IK to solve for joint angles of each pose
+q1 = IKdobot_inputTransform(T1);         % sovle for joint angles
+q2 = IKdobot_inputTransform(T2);         % sove for joint angles
+handles.model.animate(q1);  % plot first pose
+pause(2);
+
+% Use joint interpolation to move between the two poses and plot path
+qMatrix = jtraj(q1,q2,steps);
+
+% Find all the joint states in trajectory that are in collision
+    robotInCollision = false;
+    int_collision = false;
+% go through each step of the trajectory and check the result to see if it is in collision
+for a = 1: steps
+    result(a) = false;
+    q = qMatrix(a,:);
+    tr = zeros(4,4,handles.model.n+1);
+    tr(:,:,1) = handles.model.base;
+    L = handles.model.links;
+    for b = 1:handles.model.n
+         tr(:,:,b+1) = tr(:,:,b) * trotz(q(b)+L(b).offset) * transl(0,0,L(b).d) * transl(L(b).a,0,0) * trotx(L(b).alpha);
+    end
+    % Get the transform of every joint (i.e. start and end of every link)
+        for i = 1:size(tr,3)-1
+             if get(handles.simu_colli,'Value')==1
+                 guidata(hObject,handles);
+                for faceIndex = 1:size(handles.cube.faces,1)
+                    vertOnPlane = handles.cube.vertex(handles.cube.faces(faceIndex,1)',:);
+                    [intersectP,check] = LinePlaneIntersection(handles.cube.faceNormals(faceIndex,:),vertOnPlane,tr(1:3,4,i)',tr(1:3,4,i+1)'); 
+                    if check==1 && IsIntersectionPointInsideTriangle(intersectP,handles.cube.vertex(handles.cube.faces(faceIndex,:)',:))
+                        plot3(intersectP(1),intersectP(2),intersectP(3),'*g');
+    %                     display('intersection');
+                        result = true;      % set step of logical vector true if incollision
+                        robotInCollision = true;
+                    end
+                end
+%              elseif get(handles.simu_colli,'Value')==0
+%                  
+%                  continue;
+                 
+             end   
+        end
+        if get(handles.simu_env,'Value')== 1 && get(handles.simu_inter,'Value') == 1
+        for faceIndex_int = 1:size(handles.inter.faces_int,1)-1
+        for faceIndex_cage = 1:size(handles.cage.faces_cage,1)
+ 
+                vertOnPlane_cage = handles.cage.vertex_cage(handles.cage.faces_cage(faceIndex_cage,1)',:);      % simulated cage cube
+                vertOnPlane_int_1 = handles.inter.vertex_int(handles.inter.faces_int(faceIndex_int,1)',:);         % simulated interupt object cube
+                vertOnPlane_int_2 = handles.inter.vertex_int(handles.inter.faces_int(faceIndex_int,2)',:);
+        
+                [intersectP,check] = LinePlaneIntersection(handles.cage.faceNormals_cage(faceIndex_cage,:),vertOnPlane_cage,vertOnPlane_int_1,vertOnPlane_int_2); 
+                if check==1 && IsIntersectionPointInsideTriangle(intersectP,handles.cage.vertex_cage(handles.cage.faces_cage(faceIndex_cage,:)',:))
+                    result = true;
+                    int_collision = true;
+                    
+                end
+                end
+        end
+        end
+     if robotInCollision == true || int_collision ==true
+        disp('Collision Detected or Environment is unsafe');
+        return;
+     else
+        handles.model.animate(qMatrix(a,:));     
+        disp('Robot is operating safely');        
+     end
+
+end
+
+
+% --- Executes on button press in spawn_env_cage.
+
+
+
+
+% --- Executes on button press in pushbutton29.
+function pushbutton29_Callback(hObject, eventdata, handles)
+% hObject    handle to pushbutton29 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+
+% --- Executes on button press in pushbutton30.
+function pushbutton30_Callback(hObject, eventdata, handles)
+% hObject    handle to pushbutton30 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+
+% --- Executes on button press in radiobutton1.
+function radiobutton1_Callback(hObject, eventdata, handles)
+% hObject    handle to radiobutton1 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hint: get(hObject,'Value') returns toggle state of radiobutton1
+
+
+% --- Executes on button press in simu_colli.
+function simu_colli_Callback(hObject, eventdata, handles)
+% hObject    handle to simu_colli (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hint: get(hObject,'Value') returns toggle state of simu_colli
+cubeCenter = [0.175, -0.3, 0.25];
+cubeSides = 0.3;
+% cubeCenter = [1, 1, 1];
+% cubeSides = 0.3;
+plotOptions.plotFaces = true;
+[vertex,faces,faceNormals] = RectangularPrism(cubeCenter-cubeSides/2, cubeCenter+cubeSides/2,plotOptions);
+handles.cube.vertex = vertex;
+handles.cube.faces = faces;
+handles.cube.faceNormals = faceNormals;
+guidata(hObject,handles);
+pause(0.5);
+
+% --- Executes on button press in simu_env.
+function simu_env_Callback(hObject, eventdata, handles)
+% hObject    handle to simu_env (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hint: get(hObject,'Value') returns toggle state of simu_env
+cubeCenter_cage = [0, 0, 0];
+cubeSides_cage = 1;
+
+plotOptions.plotEdges = true;
+[vertex_cage,faces_cage,faceNormals_cage] = RectangularPrism(cubeCenter_cage-cubeSides_cage/2, cubeCenter_cage+cubeSides_cage/2,plotOptions);
+handles.cage.vertex_cage = vertex_cage;
+handles.cage.faces_cage = faces_cage;
+handles.cage.faceNormals_cage = faceNormals_cage;
+guidata(hObject,handles);
+
+% --- Executes on button press in simu_inter.
+function simu_inter_Callback(hObject, eventdata, handles)
+% hObject    handle to simu_inter (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hint: get(hObject,'Value') returns toggle state of simu_inter
+cubeCenter_int = [1, 1, 1];
+cubeSides_int = 0.1;
+
+plotOptions.plotEdges = true;
+[vertex_int,faces_int,faceNormals_int] = RectangularPrism(cubeCenter_int-cubeSides_int/2, cubeCenter_int+cubeSides_int/2,plotOptions);
+handles.inter.vertex_int = vertex_int;
+handles.inter.faces_int = faces_int;
+handles.inter.faceNormals_int = faceNormals_int;
+guidata(hObject,handles);
+
+% --- Executes on button press in eStopRelease.
+function eStopRelease_Callback(hObject, eventdata, handles)
+% hObject    handle to eStopRelease (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+handles = guidata(hObject);
+if handles.eStopState == 1
+    handles.eStopState = 2
+    guidata(hObject,handles)
+    disp('E-STOP RELEASED')
+    stopMsg = 'E-STOP RELEASED';
+set(handles.robot_status,'String',stopMsg);
+else
+    disp('E-STOP ALREADY RELEASED')
+    stopMsg = 'E-STOP ALREADY RELEASED';
+set(handles.robot_status,'String',stopMsg);
+end
+
+ 
+
+% --- Executes on button press in Clear_button.
+function Clear_button_Callback(hObject, eventdata, handles)
+% hObject    handle to Clear_button (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+cla (handles.axes1,'reset');
+
+
+
+function current_x_Callback(hObject, eventdata, handles)
+% hObject    handle to current_x (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hints: get(hObject,'String') returns contents of current_x as text
+%        str2double(get(hObject,'String')) returns contents of current_x as a double
+
+
+% --- Executes during object creation, after setting all properties.
+function current_x_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to current_x (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: edit controls usually have a white background on Windows.
+%       See ISPC and COMPUTER.
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
+
+
+
+function current_y_Callback(hObject, eventdata, handles)
+% hObject    handle to current_y (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hints: get(hObject,'String') returns contents of current_y as text
+%        str2double(get(hObject,'String')) returns contents of current_y as a double
+
+
+% --- Executes during object creation, after setting all properties.
+function current_y_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to current_y (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: edit controls usually have a white background on Windows.
+%       See ISPC and COMPUTER.
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
+
+
+
+function current_z_Callback(hObject, eventdata, handles)
+% hObject    handle to current_z (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hints: get(hObject,'String') returns contents of current_z as text
+%        str2double(get(hObject,'String')) returns contents of current_z as a double
+
+
+% --- Executes during object creation, after setting all properties.
+function current_z_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to current_z (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: edit controls usually have a white background on Windows.
+%       See ISPC and COMPUTER.
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
+
+
+
+function robot_status_Callback(hObject, eventdata, handles)
+% hObject    handle to robot_status (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hints: get(hObject,'String') returns contents of robot_status as text
+%        str2double(get(hObject,'String')) returns contents of robot_status as a double
+
+
+% --- Executes during object creation, after setting all properties.
+function robot_status_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to robot_status (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: edit controls usually have a white background on Windows.
+%       See ISPC and COMPUTER.
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
