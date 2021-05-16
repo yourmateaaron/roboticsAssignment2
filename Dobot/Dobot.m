@@ -4,8 +4,9 @@ classdef Dobot < handle
         model;
         
         %>
-        workspace = [-3 3 -3 3 -1.1 2];
-        scale = 0.5;
+        workspace = [-2.5 2.5 -2.5 2.5 -1.1 1.5];
+%         workspace = [-0.5 0.5 -0.5 0.5 -0.5 0.5];
+        scale = 0.25;
         qhome = [0    0.1166    1.4480    1.5770         0];
     end
     
@@ -15,7 +16,7 @@ function self = Dobot()
 % robot = 
 self.GetDobotRobot();
 % robot = 
-self.PlotAndColourRobot();
+self.PlotRobot();
 % self.PlotAndColourRobot();%robot,workspace);
 
 end
@@ -47,43 +48,49 @@ function GetDobotRobot(self)
 
     self.model = SerialLink(L,'name',name);
 end
-%% PlotAndColourRobot
-% Given a robot index, add the glyphs (vertices and faces) and
-% colour them in if data is available 
-function PlotAndColourRobot(self)%robot,workspace)
-    for linkIndex = 0:self.model.n
-        [ faceData, vertexData, plyData{linkIndex+1} ] = plyread(['DobotLink',num2str(linkIndex),'.ply'],'tri'); %#ok<AGROW>
-        self.model.faces{linkIndex+1} = faceData;
-        self.model.points{linkIndex+1} = vertexData;
-    end
-
-    % Display robot
-    self.model.plot3d(self.qhome,'noarrow','workspace',self.workspace);
-    if isempty(findobj(get(gca,'Children'),'Type','Light'))
-        camlight
-    end  
-    self.model.delay = 0;
-
-    % Try to correctly colour the arm (if colours are in ply file data)
-    for linkIndex = 0:self.model.n
-        handles = findobj('Tag', self.model.name);
-        h = get(handles,'UserData');
-        try 
-            h.link(linkIndex+1).Children.FaceVertexCData = [plyData{linkIndex+1}.vertex.red ...
-                                                          , plyData{linkIndex+1}.vertex.green ...
-                                                          , plyData{linkIndex+1}.vertex.blue]/255;
-            h.link(linkIndex+1).Children.FaceColor = 'interp';
-        catch ME_1
-            disp(ME_1);
-            continue;
-        end
-    end
-end        
-%% Determine the base of the robot and plot the 3D model
-function DobotBaseAndPlot(self,position)
-    self.model.base = transl(position);
-    self.PlotAndColourRobot();
+%% Plot
+function PlotRobot(self)
+    self.model.plot(self.qhome,'workspace',self.workspace,'scale',self.scale,'noarrow')
+    view(3);
 end
+
+%% PlotAndColourRobot
+% % Given a robot index, add the glyphs (vertices and faces) and
+% % colour them in if data is available 
+% function PlotAndColourRobot(self)%robot,workspace)
+%     for linkIndex = 0:self.model.n
+%         [ faceData, vertexData, plyData{linkIndex+1} ] = plyread(['DobotLink',num2str(linkIndex),'.ply'],'tri'); %#ok<AGROW>
+%         self.model.faces{linkIndex+1} = faceData;
+%         self.model.points{linkIndex+1} = vertexData;
+%     end
+% 
+%     % Display robot
+%     self.model.plot3d(self.qhome,'noarrow','workspace',self.workspace);
+%     if isempty(findobj(get(gca,'Children'),'Type','Light'))
+%         camlight
+%     end  
+%     self.model.delay = 0;
+% 
+%     % Try to correctly colour the arm (if colours are in ply file data)
+%     for linkIndex = 0:self.model.n
+%         handles = findobj('Tag', self.model.name);
+%         h = get(handles,'UserData');
+%         try 
+%             h.link(linkIndex+1).Children.FaceVertexCData = [plyData{linkIndex+1}.vertex.red ...
+%                                                           , plyData{linkIndex+1}.vertex.green ...
+%                                                           , plyData{linkIndex+1}.vertex.blue]/255;
+%             h.link(linkIndex+1).Children.FaceColor = 'interp';
+%         catch ME_1
+%             disp(ME_1);
+%             continue;
+%         end
+%     end
+% end        
+%% Determine the base of the robot and plot the 3D model
+% function DobotBaseAndPlot(self,position)
+%     self.model.base = transl(position);
+%     self.PlotAndColourRobot();
+% end
 %% GetLinkPoses
 % Gets the transform for every joint
 % q - robot joint angles
