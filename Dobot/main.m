@@ -1,59 +1,30 @@
 %% Enviroment
-
-% Fence
-[f,v,data] = plyread('Fence.ply','tri');
-% vertexColours = [data.vertex.red, data.vertex.green, data.vertex.blue]/255;
-
-Fence_h = trisurf(f,v(:,1),v(:,2),v(:,3)...
-    ,'FaceVertexCData',vertexColours,'EdgeColor','interp','EdgeLighting','flat');
-
-hold on
-
-% Table
-[f,v,data] = plyread('Table.ply','tri');
-% vertexColours = [data.vertex.red, data.vertex.green, data.vertex.blue]/255;
-
-Table_h = trisurf(f,v(:,1),v(:,2),v(:,3)...
-    ,'FaceVertexCData',vertexColours,'EdgeColor','interp','EdgeLighting','flat');
-hold on
-
-% Human
-[f,v,data] = plyread('Human.ply','tri');
-% vertexColours = [data.vertex.red, data.vertex.green, data.vertex.blue]/255;
-
-Human_h = trisurf(f,v(:,1),v(:,2),v(:,3)...
-    ,'FaceVertexCData',vertexColours,'EdgeColor','interp','EdgeLighting','flat');
-
-axis([-5,5,-5,5,0,5]);
-axis equal;
-
-% Fire Extinguisher
-[f,v,data] = plyread('fire extinguisher.ply','tri');
-% vertexColours = [data.vertex.red, data.vertex.green, data.vertex.blue]/255;
-
-Fire_extinguisher_h = trisurf(f,v(:,1),v(:,2),v(:,3)...
-    ,'FaceVertexCData',vertexColours,'EdgeColor','interp','EdgeLighting','flat');
-
-% Button
-[f,v,data] = plyread('stop button.ply','tri');
-% vertexColours = [data.vertex.red, data.vertex.green, data.vertex.blue]/255;
-
-Button_h = trisurf(f,v(:,1),v(:,2),v(:,3)...
-    ,'FaceVertexCData',vertexColours,'EdgeColor','interp','EdgeLighting','flat');
-
-% Sponge
-[f,v,data] = plyread('Sponge.ply','tri');
-% vertexColours = [data.vertex.red, data.vertex.green, data.vertex.blue]/255;
-
-Sponge_h = trisurf(f,v(:,1),v(:,2),v(:,3)...
-    ,'FaceVertexCData',vertexColours,'EdgeColor','interp','EdgeLighting','flat');
-
-% Base
-surf([-5,-5;5,5],[-5,5;-5,5],[0.01,0.01;0.01,0.01],'CData',imread('concrete.jpg'),'FaceColor','texturemap');
-hold on
-
-
-
+clear
+clf
 % Dobot
 robot = Dobot;
+hold on;
+
+PlaceObject('Table.ply',[0,0,0]);
+PlaceObject('Fence.ply',[0,0,-1]);
+PlaceObject('Human.ply',[0,0,-1]);
+PlaceObject('polesy.ply',[0,0,-1]);
+PlaceObject('sponge.ply',[0,0,0]);
+PlaceObject('EStop.ply',[0.3,-0.3,0]);
+PlaceObject('WarningSign.ply',[0,0,-1]);
+PlaceObject('Siren.ply',[0,0,-1]);
+
+
+
+
+% Base
+ surf([-5,-5;5,5],[-5,5;-5,5],[-1,-1;-1,-1],'CData',imread('concrete.jpg'),'FaceColor','texturemap');
+
+surf([-5,-5;5,5],[-5,5;-5,5],[-1,-1;1000,1000],'CData',imread('sky.jpg'),'FaceColor','texturemap');
+surf([-5,-5;5,5],[-5,5;-5,5],[1000,1000;-1,-1],'CData',imread('sky.jpg'),'FaceColor','texturemap');
+surf([-5,-5;5,5],[-5,5;-5,5],[-1,1000;-1,1000],'CData',imread('sky.jpg'),'FaceColor','texturemap');
+surf([-5,-5;5,5],[-5,5;-5,5],[1000,-1;1000,-1],'CData',imread('sky.jpg'),'FaceColor','texturemap');
+
+
+
 

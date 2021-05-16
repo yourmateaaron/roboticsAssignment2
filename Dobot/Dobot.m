@@ -4,7 +4,7 @@ classdef Dobot < handle
         model;
         
         %>
-        workspace = [-1 1 -1 1 -0.3 1];
+        workspace = [-3 3 -3 3 -1.1 2];
         scale = 0.5;
         qhome = [0    0.1166    1.4480    1.5770         0];
     end
@@ -33,8 +33,8 @@ function GetDobotRobot(self)
     L(1) = Link('d',0.138,  'a',0,      'alpha',-pi/2, 'offset',0);
     L(2) = Link('d',0,      'a',0.135,  'alpha',0,     'offset',-pi/2);
     L(3) = Link('d',0,      'a',0.147,  'alpha',0,     'offset',0);
-    L(4) = Link('d',0,      'a',0.04,  'alpha',pi/2,  'offset',-pi/2);     
-    L(5) = Link('d',-0.13,      'a',0,      'alpha',0,     'offset',0);
+    L(4) = Link('d',0,      'a',0.044,  'alpha',pi/2,  'offset',-pi/2);     
+    L(5) = Link('d',-0.138,      'a',0,      'alpha',0,     'offset',0);
 
     % Joint Limits
     L(1).qlim = [-135 135]*pi/180;

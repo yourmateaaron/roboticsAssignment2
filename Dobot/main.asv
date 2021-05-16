@@ -1,69 +1,30 @@
 %% Enviroment
-
-% Fence
-[f,v,data] = plyread('Fence.ply','tri');
-vertexColours = [data.vertex.red, data.vertex.green, data.vertex.blue]/255;
-
-fence_h = trisurf(f,v(:,1),v(:,2),v(:,3)...
-    ,'FaceVertexCData',vertexColours,'EdgeColor','interp','EdgeLighting','flat');
-
-hold on
-
-% Table
-[f,v,data] = plyread('Table.ply','tri');
-vertexColours = [data.vertex.red, data.vertex.green, data.vertex.blue]/255;
-
-table_h = trisurf(f,v(:,1),v(:,2),v(:,3)...
-    ,'FaceVertexCData',vertexColours,'EdgeColor','interp','EdgeLighting','flat');
-hold on
-
-% Human
-[f,v,data] = plyread('Human.ply','tri');
-vertexColours = [data.vertex.red, data.vertex.green, data.vertex.blue]/255;
-
-worker_h = trisurf(f,v(:,1),v(:,2),v(:,3)...
-    ,'FaceVertexCData',vertexColours,'EdgeColor','interp','EdgeLighting','flat');
-
-axis([-5,5,-5,5,0,5]);
-axis equal;
-
-% Fire Extinguisher
-[f,v,data] = plyread('FireExtinguisher.ply','tri');
-vertexColours = [data.vertex.red, data.vertex.green, data.vertex.blue]/255;
-
-FireExtinguisher_h = trisurf(f,v(:,1),v(:,2),v(:,3)...
-    ,'FaceVertexCData',vertexColours,'EdgeColor','interp','EdgeLighting','flat');
-
-% Button
-[f,v,data] = plyread('button.ply','tri');
-vertexColours = [data.vertex.red, data.vertex.green, data.vertex.blue]/255;
-
-button_h = trisurf(f,v(:,1),v(:,2),v(:,3)...
-    ,'FaceVertexCData',vertexColours,'EdgeColor','interp','EdgeLighting','flat');
-
-% Base
-surf([-5,-5;5,5],[-5,5;-5,5],[0.01,0.01;0.01,0.01],'CData',imread('concrete.jpg'),'FaceColor','texturemap');
-hold on
-
-
-% Box
-[f,v,data] = plyread('Redbox.ply','tri');
-vertexColours = [data.vertex.red, data.vertex.green, data.vertex.blue]/255;
-
-Redbox_h = trisurf(f,v(:,1),v(:,2),v(:,3)...
-    ,'FaceVertexCData',vertexColours,'EdgeColor','interp','EdgeLighting','flat');
-
-[f,v,data] = plyread('Greenbox.ply','tri');
-vertexColours = [data.vertex.red, data.vertex.green, data.vertex.blue]/255;
-
-Greenbox_h = trisurf(f,v(:,1),v(:,2),v(:,3)...
-    ,'FaceVertexCData',vertexColours,'EdgeColor','interp','EdgeLighting','flat');
-
-
+clear
+clf
 % Dobot
 robot = Dobot;
+hold on;
 
-% RedBlock
+% PlaceObject('Table.ply',[0,0,0]);
+% PlaceObject('Fence.ply',[0,0,-1]);
+% PlaceObject('Human.ply',[0,0,-1]);
+% PlaceObject('polesy.ply',[0,0,-1]);
+% PlaceObject('sponge.ply',[0,0,0]);
+% PlaceObject('EStop.ply',[0.3,-0.3,0]);
+% PlaceObject('WarningSign.ply',[0,0,-1]);
+% PlaceObject('Siren.ply',[0,0,-1]);
+% 
+% 
+% 
+% 
+% % Base
+ surf([-5,-5;5,5],[-5,5;-5,5],[-1,-1;-1,-1],'CData',imread('concrete.jpg'),'FaceColor','texturemap');
 
-Red = RedBlock(transl(-0.25,0,0.75));
-Green = GreenBlock(transl(-0.3,0,0.75));
+surf([-5,-5;5,5],[-5,5;-5,5],[-1,-1;1000,1000],'CData',imread('sky.jpg'),'FaceColor','texturemap');
+surf([-5,-5;5,5],[-5,5;-5,5],[-1,-1;1000,1000],'CData',imread('sky.jpg'),'FaceColor','texturemap');
+surf([-5,-5;5,5],[-5,5;-5,5],[-1,-1;1000,1000],'CData',imread('sky.jpg'),'FaceColor','texturemap');
+surf([-5,-5;5,5],[-5,5;-5,5],[-1,-1;1000,1000],'CData',imread('sky.jpg'),'FaceColor','texturemap');
+
+
+
+
