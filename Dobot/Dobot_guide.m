@@ -95,13 +95,13 @@ PlaceObject('polesy.ply',[0,0,-1]);
 PlaceObject('sponge.ply',[-0.0163,   -0.2991,    0.03]);
 PlaceObject('EStop.ply',[-0.3,-0.3,0]);
 PlaceObject('WarningSign.ply',[0,0,-1]);
-PlaceObject('Siren.ply',[-0.1,-1,-1.5]);
+PlaceObject('Siren.ply',[0,0,-1]);
 % Base
 surf([-5,-5;5,5],[-5,5;-5,5],[-1,-1;-1,-1],'CData',imread('concrete.jpg'),'FaceColor','texturemap');
-surf([-2.5,-2.5;2.5,2.5],[-2.5,2.5;-2.5,2.5],[-1,-1;1000,1000],'CData',imread('sky.jpg'),'FaceColor','texturemap');
-surf([-2.5,-2.5;2.5,2.5],[-2.5,2.5;-2.5,2.5],[1000,1000;-1,-1],'CData',imread('sky.jpg'),'FaceColor','texturemap');
-% surf([-2.5,-2.5;2.5,2.5],[-2.5,2.5;-2.5,2.5],[-1,1000;-1,1000],'CData',imread('sky.jpg'),'FaceColor','texturemap');
-surf([-2.5,-2.5;2.5,2.5],[-2.5,2.5;-2.5,2.5],[1000,-1;1000,-1],'CData',imread('sky.jpg'),'FaceColor','texturemap');
+surf([-5,-5;5,5],[-5,5;-5,5],[-1,-1;1000,1000],'CData',imread('sky.jpg'),'FaceColor','texturemap');
+surf([-5,-5;5,5],[-5,5;-5,5],[1000,1000;-1,-1],'CData',imread('sky.jpg'),'FaceColor','texturemap');
+surf([-5,-5;5,5],[-5,5;-5,5],[-1,1000;-1,1000],'CData',imread('sky.jpg'),'FaceColor','texturemap');
+surf([-5,-5;5,5],[-5,5;-5,5],[1000,-1;1000,-1],'CData',imread('sky.jpg'),'FaceColor','texturemap');
 
 
 data = guidata(hObject);
@@ -1087,11 +1087,7 @@ function simu_inter_Callback(hObject, eventdata, handles)
 % handles    structure with handles and user data (see GUIDATA)
 
 % Hint: get(hObject,'Value') returns toggle state of simu_inter
-<<<<<<< HEAD
-cubeCenter_int = [1, 1, 0];
-=======
 cubeCenter_int = [1, 1, 1];
->>>>>>> ce2a36bba80cf1d60d0cc49f34222b7254e17858
 cubeSides_int = 0.5;
 
 plotOptions.plotFaces = true;
@@ -1112,7 +1108,7 @@ if handles.eStopState == 1
     guidata(hObject,handles)
     disp('E-STOP RELEASED')
     stopMsg = 'E-STOP RELEASED';
-    set(handles.robot_status,'String',stopMsg);
+set(handles.robot_status,'String',stopMsg);
 else
     disp('E-STOP ALREADY RELEASED')
     stopMsg = 'E-STOP ALREADY RELEASED';
