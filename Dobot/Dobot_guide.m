@@ -93,7 +93,7 @@ PlaceObject('Fence.ply',[0,0,-1]);
 PlaceObject('Human.ply',[0,0,-1]);
 PlaceObject('polesy.ply',[0,0,-1]);
 PlaceObject('sponge.ply',[-0.0163,   -0.2991,    0]);
-PlaceObject('EStop.ply',[0.3,-0.3,0]);
+PlaceObject('EStop.ply',[0.3,0.3,0]);
 PlaceObject('WarningSign.ply',[0,0,-1]);
 PlaceObject('Siren.ply',[0,0,-1]);
 % Base
