@@ -61,7 +61,7 @@ guidata(hObject, handles);
 % This sets up the initial plot - only do when we are invisible
 % so window can get raised using Dobot_guide.
 if strcmp(get(hObject,'Visible'),'off')
-    plot(rand(5));
+    plot(rand(1));
 end
 
 % UIWAIT makes Dobot_guide wait for user response (see UIRESUME)
@@ -85,7 +85,25 @@ function pushbutton1_Callback(hObject, eventdata, handles)
 % handles    structure with handles and user data (see GUIDATA)
 axes(handles.axes1);
 dobot = Dobot();
-dobot.PlotRobot();
+
+%Plot environment
+hold on;
+PlaceObject('Table.ply',[0,0,0]);
+PlaceObject('Fence.ply',[0,0,-1]);
+PlaceObject('Human.ply',[0,0,-1]);
+PlaceObject('polesy.ply',[0,0,-1]);
+PlaceObject('sponge.ply',[0,0,0]);
+PlaceObject('EStop.ply',[0.3,-0.3,0]);
+PlaceObject('WarningSign.ply',[0,0,-1]);
+PlaceObject('Siren.ply',[0,0,-1]);
+% Base
+surf([-5,-5;5,5],[-5,5;-5,5],[-1,-1;-1,-1],'CData',imread('concrete.jpg'),'FaceColor','texturemap');
+surf([-5,-5;5,5],[-5,5;-5,5],[-1,-1;1000,1000],'CData',imread('sky.jpg'),'FaceColor','texturemap');
+surf([-5,-5;5,5],[-5,5;-5,5],[1000,1000;-1,-1],'CData',imread('sky.jpg'),'FaceColor','texturemap');
+surf([-5,-5;5,5],[-5,5;-5,5],[-1,1000;-1,1000],'CData',imread('sky.jpg'),'FaceColor','texturemap');
+surf([-5,-5;5,5],[-5,5;-5,5],[1000,-1;1000,-1],'CData',imread('sky.jpg'),'FaceColor','texturemap');
+
+
 data = guidata(hObject);
 data.model = dobot.model;
 guidata(hObject,data);
@@ -624,7 +642,7 @@ wipeSequence = [1,4,6,4,1,7,8,7,8];
 for k=1:length(wipeSequence)
     
     T1 = waypointPoses{wipeSequence(k)};
-    if(i == length(wipeSequence))
+    if(k == length(wipeSequence))
         T2 = waypointPoses{1};
     else
         T2 = waypointPoses{wipeSequence(k+1)};
