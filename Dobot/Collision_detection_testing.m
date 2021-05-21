@@ -104,7 +104,7 @@ robotInCollision = false;
 % go through each step of the trajectory and check the result to see if it is in collision
 for a = 1: steps
     result(a) = false;
-        tr = dobot.GetLinkPoses(qMatrix(a,:));        % Get the transform of every joint (i.e. start and end of every link)
+        tr = GetLinkPoses(dobot.model.n,dobot.model.base,dobot.model.links,qMatrix(a,:));        % Get the transform of every joint (i.e. start and end of every link)
         for i = 1:size(tr,3)-1
             for faceIndex = 1:size(faces,1)
                 vertOnPlane = vertex(faces(faceIndex,1)',:);

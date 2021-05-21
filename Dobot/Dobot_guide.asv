@@ -85,13 +85,9 @@ function pushbutton1_Callback(hObject, eventdata, handles)
 % handles    structure with handles and user data (see GUIDATA)
 axes(handles.axes1);
 dobot = Dobot();
-workspace = [-2.5 2.5 -2.5 2.5 -2.2 2];
-%         workspace = [-0.5 0.5 -0.5 0.5 -0.5 0.5];
-        scale = 0.25;
-        qhome = [0    0.1166    1.4480    1.5770         0];
-dobot.model.plot(qhome,'workspace',workspace,'scale',scale,'noarrow')
+
 %Plot environment
-%  hold on;
+ hold on;
 % PlaceObject('Table.ply',[0,0,0]);
 % PlaceObject('Fence.ply',[0,0,-1]);
 % PlaceObject('Human.ply',[0,0,-1]);
@@ -106,6 +102,9 @@ dobot.model.plot(qhome,'workspace',workspace,'scale',scale,'noarrow')
 % surf([-2.5,-2.5;2.5,2.5],[-2.5,2.5;-2.5,2.5],[1000,1000;-1,-1],'CData',imread('sky.jpg'),'FaceColor','texturemap');
 % % surf([-2.5,-2.5;2.5,2.5],[-2.5,2.5;-2.5,2.5],[-1,1000;-1,1000],'CData',imread('sky.jpg'),'FaceColor','texturemap');
 % surf([-2.5,-2.5;2.5,2.5],[-2.5,2.5;-2.5,2.5],[1000,-1;1000,-1],'CData',imread('sky.jpg'),'FaceColor','texturemap');
+
+
+
 data = guidata(hObject);
 data.model = dobot.model;
 guidata(hObject,data);
@@ -737,7 +736,7 @@ function wipe_area_1_Callback(hObject, eventdata, handles)
 % hObject    handle to wipe_area_1 (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
-handles = guidata(hObject); 
+
 wipeLocation1 = [0.225 0];
 wipeRadius1 = [0.03,0.1];
 wipeHeight1 = 0.037;
@@ -776,12 +775,16 @@ for a = 1: steps
 end
   
 
+wipeLocation = [0 0.2];
+wipeRadius = [0.1,0.03];
+wipeHeight = 0.037;
+
 % --- Executes on button press in wipe_area_2.
 function wipe_area_2_Callback(hObject, eventdata, handles)
 % hObject    handle to wipe_area_2 (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
-handles = guidata(hObject); 
+
 wipeLocation2 = [0 0.2];
 wipeRadius2 = [0.1,0.03];
 wipeHeight2 = 0.037;
@@ -826,6 +829,7 @@ function pick_up_spone_Callback(hObject, eventdata, handles)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 handles = guidata(hObject);              % achieve handles data
+
 [waypointCoords,waypointPoses,wipeSequence,steps] = GeneralWipe_data(50);
 
 % define the transformations for two poses
@@ -874,6 +878,23 @@ for a = 1: steps
      end
 
 end
+
+
+
+
+
+
+
+
+% --- Executes on button press in radiobutton1.
+function radiobutton1_Callback(hObject, eventdata, handles)
+% hObject    handle to radiobutton1 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hint: get(hObject,'Value') returns toggle state of radiobutton1
+
+
 % --- Executes on button press in simu_colli.
 function simu_colli_Callback(hObject, eventdata, handles)
 % hObject    handle to simu_colli (see GCBO)
@@ -900,6 +921,7 @@ function simu_env_Callback(hObject, eventdata, handles)
 % Hint: get(hObject,'Value') returns toggle state of simu_env
 cubeCenter_cage = [0, 0, 0];
 cubeSides_cage = 2;
+
 plotOptions.plotEdges = true;
 [vertex_cage,faces_cage,faceNormals_cage] = RectangularPrism(cubeCenter_cage-cubeSides_cage/2, cubeCenter_cage+cubeSides_cage/2,plotOptions);
 handles.cage.vertex_cage = vertex_cage;
@@ -938,6 +960,19 @@ function Clear_button_Callback(hObject, eventdata, handles)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 cla (handles.axes1,'reset');
+
+
+
+
+
+
+
+
+
+
+
+
+
 function robot_status_Callback(hObject, eventdata, handles)
 % hObject    handle to robot_status (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
@@ -958,13 +993,114 @@ function robot_status_CreateFcn(hObject, eventdata, handles)
 if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
     set(hObject,'BackgroundColor','white');
 end
+
+
 % --- Executes on button press in rmrc_button.
 function rmrc_button_Callback(hObject, eventdata, handles)
 % hObject    handle to rmrc_button (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 % Set parameters for the simulation
-[waypointCoords,waypointPoses,wipeSequence,steps] = GeneralWipe_data(50);
-[qMatrix] = RMRC_motion(waypointCoords,8,7,handles.model,10,0.1,0.1);
+end_effector_rotation = [0,0,0];
+
+% Cordinates: XYZ
+waypointCoords{1} = [0.2067         0    0.1350];        % q = zeros(1,4)
+waypointCoords{2} = [0.1710   -0.1177    0.1376];
+waypointCoords{3} = [0.0882   -0.1875    0.1383];
+waypointCoords{4} = [-0.0078   -0.2064    0.1379];
+waypointCoords{5} = [-0.0145   -0.2993    0.09];       % right above sponge
+waypointCoords{6} = [-0.0163   -0.2991    0.03];       % ready to close gripper
+waypointCoords{7} = [0.2057   -0.2312    0.037]; 
+waypointCoords{8} = [0.2057   0.2312    0.037];
+
+% Poses: TR
+for i=1:length(waypointCoords)
+    waypointPoses{i} = eul2tr(end_effector_rotation) * transl(waypointCoords{i}(1),waypointCoords{i}(2),waypointCoords{i}(3));
+end
+startWaypointIndex = 8;
+endWaypointIndex = 7;
+x1 = waypointCoords{startWaypointIndex}';
+x2 = waypointCoords{endWaypointIndex}';
+
+% Set parameters for the simulation
+t = 10;             % Total time (s)
+deltaT = 0.1;      % Control frequency
+steps = t/deltaT;   % No. of steps for simulation
+delta = 2*pi/steps; % Small angle change
+epsilon = 0.1;      % Threshold value for manipulability/Damped Least Squares
+% W = diag([1 1 1 0.1 0.1 0.1]);    % Weighting matrix for the velocity vector
+W = diag([1 1 1 0.1 0.1]);
+
+% Allocate array data
+m = zeros(steps,1);             % Array for Measure of Manipulability
+qMatrix = zeros(steps,5);       % Array for joint angles
+qdot = zeros(steps,5);          % Array for joint velocities
+theta = zeros(3,steps);         % Array for roll-pitch-yaw angles
+x = zeros(3,steps);             % Array for x-y-z trajectory
+positionError = zeros(3,steps); % For plotting trajectory error
+angleError = zeros(3,steps);    % For plotting trajectory error
+
+% Set up trajectory, intial pose
+s = lspb(0,1,steps);            % trapezoidal trajectory scalar
+for i=1:steps
+    x(:,i) = x1*(1-s(i)) + s(i)*x2;     % Points in x-y-z
+    theta(1,i) = 0;                     % Roll angle 
+    theta(2,i) = 0;                     % Pitch angle
+    theta(3,i) = 0;                     % Yaw angle
+end
+
+T = [rpy2r(theta(1,1),theta(2,1),theta(3,1)) x(:,1);    % create transformation of first point and angle
+        zeros(1,3)  1 ];
+% q0 = zeros(1,5);                                      % initial guess for joint angles
+% qMatrix(1,:) = dobot.model.ikcon(T,q0);
+qMatrix(1,:) = IKdobot_inputTransform(T);               % solve joint angles to achieve first waypoint                   
+
+% Track trajectory with RMRC
+for i=1:steps-1
+    T = handles.model.fkine(qMatrix(i,:));                   % FK for pose at current joint state
+    deltaX = x(:,i+1) - T(1:3,4);                       % position error from next waypoint
+    Rd = rpy2r(theta(1,i+1),theta(2,i+1),theta(3,i+1)); % next RPY angles then convert to rotation matrix (desired rotation)
+    Ra = T(1:3,1:3);                                    % actual rotation matrix
+    Rdot = (1/deltaT) * (Rd - Ra);                      % rotation matrix error
+    S = Rdot * Ra';                                     % skew symmetrix matrix to extract linear and angular velocity
+    linear_velocity = (1/deltaT) * deltaX;
+%     angular_velocity = [S(3,2); S(1,3); S(2,1)];
+    angular_velocity = [S(3,2); S(1,3)];
+    deltaTheta = tr2rpy(Rd * Ra');
+    xdot = W*[linear_velocity;angular_velocity];        % calculate end-effector velocity to reach next waypoint
+    J = handles.model.jacob0(qMatrix(i,:));             % get jacobian at current joint state
+    J = J(1:5,:);           % take first 5 rows to make square matrix
+    mom(i) = real(sqrt(det(J*J')));
+    if mom(i) < epsilon                       % if manipulability is less than given threshold
+        lambda = (1 - mom(i)/epsilon)*5E-2;
+    else
+        lamda = 0;
+    end
+    invJ = inv(J'*J + lambda *eye(5))*J';      % DLS inverse
+    qdot(i,:) = (invJ * xdot)';                 % solve the RMRC equation
+    
+    for j = 1:5                     % Loop through joints 1 to 5
+        % If next joint angle is lower than joint limit, stop the model
+        if qMatrix(i,j) + deltaT*qdot(i,j) < handles.model.qlim(j,1)
+            qdot(i,j) = 0;
+        % If next joint angle is greater than joint limit, stop the model
+        elseif qMatrix(i,j) + deltaT*qdot(i,j) > handles.model.qlim(j,2)
+            qdot(i,j) = 0;
+        end
+    end
+    
+%     update next joint state based on joint velocities
+    qMatrix(i+1,:) = qMatrix(i,:) + deltaT*qdot(i,:);
+    positionError(:,i) = x(:,i+1) - T(1:3,4);           % For plotting
+    angleError(:,i) = deltaTheta;                       % For plotting
+
+end
+
 handles.model.plot(qMatrix,'trail','r-')
 
+
+% --- Executes on button press in pushbutton37.
+function pushbutton37_Callback(hObject, eventdata, handles)
+% hObject    handle to pushbutton37 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)

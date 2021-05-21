@@ -4,7 +4,7 @@ classdef Dobot < handle
         model;
         
         %>
-        workspace = [-2.5 2.5 -2.5 2.5 -1.1 1.5];
+        workspace = [-2.5 2.5 -2.5 2.5 -2.2 2];
 %         workspace = [-0.5 0.5 -0.5 0.5 -0.5 0.5];
         scale = 0.25;
         qhome = [0    0.1166    1.4480    1.5770         0];
@@ -91,24 +91,8 @@ end
 %     self.model.base = transl(position);
 %     self.PlotAndColourRobot();
 % end
-%% GetLinkPoses
-% Gets the transform for every joint
-% q - robot joint angles
-% robot -  seriallink robot model
-% transforms - list of transforms
-function [ transforms ] = GetLinkPoses( self, q )
-    
-    transforms = zeros(4,4,self.model.n+1);
-    transforms(:,:,1) = self.model.base;
-    L = self.model.links;
-    
-    for i = 1:self.model.n
-        transforms(:,:,i+1) = transforms(:,:,i) * trotz(q(i)+L(i).offset)...
-                                                * transl(0,0,L(i).d)...
-                                                * transl(L(i).a,0,0)...
-                                                * trotx(L(i).alpha);
-    end
-end
+
+
 
 end
 end
